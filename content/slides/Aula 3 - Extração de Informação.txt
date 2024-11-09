@@ -1,0 +1,388 @@
+Processamento de Linguagem Natural
+Extração de Informação
+
+Objetivo
+Extrair estrutura a partir de dados não estruturados
+Barack Obama was born in Hawaii…
+Unstructured Text
+Barack Obama
+Born
+Hawaii
+was
+was born in
+Structured Text
+Information Extraction
+Nome
+Barack Obama
+Local de Nascimento
+Hawaii
+Data de Nascimento
+04/08/1961
+Profissão
+advogado, político
+Esposa
+Michelle Robinson
+Filhos
+Malia Ann, Natasha
+O que é Extração de Informação? Detectar informações que são importantes dentro de um texto não estruturado.
+
+Dado não estruturado. Texto Corrido. Difícil de ser processado por máquina
+
+Dado estruturado. Texto organizado por segmentos. Ex: formato de grafo. Melhor o entendimento/processamento de máquina.
+
+Pode ajudar em várias tarefas: Consulta, consumo, exploração de relações. Diferenciar pessoas de locais, de organizações… 
+
+
+Rotulagem Sequencial
+Objetivo: atribuir um dado rótulo a cada palavra de um sentença
+Rótulos dependem de outras palavras da sequência (não é i.i.d)
+
+Algumas Tarefas…
+Named Entity Recognition
+Rotulagem de Papel Semântico
+Part-of-Speech Tagging (Rotulagem de Classe Gramatical)
+Bioinformática
+O texto não estruturado tem uma natureza sequencial.
+
+i.i.d : não é independente e identicamente distribuída
+
+Named Entity Recognition
+Identificar nomes de pessoas, locais etc no texto
+
+people		organizations		places
+Michael Dell is the CEO of Dell Computer Corporation and lives in Austin Texas.
+
+Extrair partes de informação relevante para uma dada aplicação
+
+make	model	year		mileage	price
+For sale, 2002 Toyota Prius, 20,000 mi, $15K or best offer. 
+Available starting July 30, 2006.
+
+Rotulagem de Papel Semântico
+Determina o papel semântico de cada noun phrase que é argumento do verbo
+
+agent	patient	source	destination	instrument
+John drove Mary from Austin to Dallas in his Toyota Prius.
+The hammer broke the window.
+Noun Phrase = Frase substantiva
+
+Quem é o agente da ação?
+Quem é o agente paciente?
+Qual a Origem?
+Qual o destino?
+Qual é o instrumento da ação?
+
+Bioinformática
+Rotular sequências genéticas
+
+exon			intron
+AGCTAACGTTCGATACGGATTACAGCCT
+Conjunto de sequências genéticas codificantes e não-codificantes do genoma humano
+Exons: sequências codificantes
+Introns: sequências não codificantes
+
+Como identificar cada um desses rótulos?
+Part-of-Speech Tagging
+Named Entity Recognition 
+São importantes para identificar a estrutura de uma sentença e o seu significado
+
+Part-of-Speech -> Classes gramaticais das palavras
+
+Named Entity Recognition -> Identificar quais são as palavras que representam entidades do mundo real
+
+Part-of-speech Tagging
+Atribuir a classe gramatical a cada palavra de uma sentença(substantivo, adjetivo, verbo etc)
+Útil para tarefa de desambiguação: palavras podem ter mais de uma classe gramaticalEx: book, that etc
+Classe mais frequente da palavra já tem alta acurácia
+John saw the saw  and decided  to  take  it   to   the  table.
+ PN     V    Det   N    Con     V          Part    V     Pro   Prep   Det     N
+Desambiguação
+Saw: “viu” (verbo)
+Saw: “Serrote”  (substantivo comum)
+
+Classe mais frequente -> alta acurácia -> o modelo irá predizê-la pois é mais frequente (maior a chance de acerto)
+
+Part-of-speech Tagging
+Textos em inglês
+Pequena proporção das palavras possui mais de uma classe (85-86%)
+Palavras com mais de uma classe gramatical são mais frequentes (55-67%)
+
+WSJ (Wall Street Journal)
+
+Part-of-speech Tagging
+
+Closed class:
+Preposições e pronomes
+Tendem a ser curtos
+Alta frequência
+Open class:
+Substantivos, verbos, adjetivos e advérbios
+Constantemente sendo criados
+17 principais Classes gramaticais em inglês -> Conjunto de Dependencias Universais
+
+Closed: muito dificilmente aparecem preposições novas
+
+Open: são criados novos constantemente
+
+
+POS no Penn Treebank
+45 classes detalhadas -> amplia o conjunto anterior
+
+Exemplos de rotulagem
+There/PRON/EX are/VERB/VBP 70/NUM/CD children/NOUN/NNS there/ADV/RB ./PUNC/.
+
+
+Preliminary/ADJ/JJ findings/NOUN/NNS were/AUX/VBD reported/VERB/VBN in/ADP/IN today/NOUN/NN ’s/PART/POS New/PROPN/NNP England/PROPN/NNP Journal/PROPN/NNP of/ADP/IN Medicine/PROPN/NNP
+
+Named Entity Recognition (Information Extraction)
+Named entity: tudo que se refere a um nome próprio (regra geral)
+
+
+
+
+Pode ser qualquer entidade: produto, doenças etc
+Usado em Natural Language Understanding: Q&A, chatbot
+Dificuldades:
+Encontrar o pedaço do texto que contém a entidade
+Ambiguidade: JFK (pessoa ou aeroporto)
+JFK -> John F. Kennedy
+
+Airport -> Nova York
+
+BIO Tagging
+Convenção para rotulagem de sequência
+B - Beginning
+I - Inside
+E - End
+O - Outside
+
+Modelos de Rotulagem Sequencial
+Hidden Markov Model (HMM)
+Recurrent Neural Networks (RNN)
+O Modelo deve atribuir um rótulo para cada palavra da sequência
+
+Hidden Markov Model para POS Tagging
+Modelo probabilístico sequencial
+Computa a probabilidade para possíveis sequências de rótulos
+Escolhe a melhor sequência
+Rótulos estão escondidos (hidden)
+Observa palavras
+Inferir rótulos (ex. POS) da sequência de palavras
+É um modelo clássico que introduz muitos dos conceitos chave para a modelagem sequencial que são usados por vários modelos atuais
+
+Exemplo: dado que você só vê como as pessoas estão vestidas, tente prever como tá o clima no dia
+Variável escondida: o clima
+Variável observada: o tipo de roupa vestida
+
+
+
+No caso de PLN
+
+Dado um conjunto de palavras -> inferir as classes gramaticais
+
+Variável escondida: os labels a serem atribuídos (Postag, NER)
+Variavel observada: palavras
+
+
+Markov Chain
+Quando prevendo o rótulo futuro, o passado não importa. Somente o estado presente.
+Markov Assumption
+P(qi = a|q1...qi−1) = P(qi = a|qi−1)
+π = [0.1, 0.7, 0.2]
+Para prever o clima de amanhã você vai se basear apenas no clima de hoje
+
+Pi: distribuição de probabilidade inicial
+
+A soma dos pesos das transições saindo de um determinado estado deve ser igual a 1
+
+ESTADOS
+OBSERVAÇÕES
+Hidden Markov Model: Componentes
+q1
+q2
+q3
+o1
+o2
+o3
+a12
+a23
+b1(o1)
+b2(o2)
+b3(o3)
+Probabilidade de mover do estado i ao estado j
+=
+Matriz de Probabilidade de Transição
+Probabilidade da Observação oi ter sido gerada pelo estado qi
+Markov Assumption: P(qi = a|q1...qi−1) = P(qi = a|qi−1)
+Output Independence: P(oi|q1, . . ., qi, . . . , qT , o1, . . . , oi, . . . , oT ) = P(oi|qi)
+Matriz A
+Matriz B
+Observações: Palavras
+Estados: classes gramaticais
+
+Matriz A (matriz de transição): as probabilidades de uma classe vir após outra
+Matriz B: a probabilidade de uma classe gramatical ser atribuída a uma palavra observada
+
+HMM Tagger: Componentes
+Matriz A: probabilidades de transição das tags
+Exemplo No corpus WSJ, MD ocorre 13.124 no corpus sendo que 10.471 vezes a tag MD aparece seguida pela tag VB. Logo, a probabilidade de termos uma tag MD seguida de VB é:
+A probabilidade de uma tag ocorrer observando-se uma tag anterior
+Contagem
+MD: ModalVB: Verb
+
+HMM Tagger: Componentes
+Matriz B: probabilidades de uma palavra associada a uma tag
+Exemplo Das 13.124 ocorrências da tag MD no corpus WSJ, a tag está associada 4046 vezes à palavra “will”. Logo, a probabilidade de termos a palavra “will” associada à tag MD é dada por:
+A probabilidade de uma palavra estar associada a uma determinada tag
+Contagem
+
+HMM Tagger: Exemplo
+Os nós são os estados escondidos que estamos tentando prever.
+
+As arestas são aquelas porcentagens de transição entre os estados escondidos
+
+Os quadros são as matrizes de pesos contendo as probabilidades de a classe pertencer a uma determinada palavra
+
+Com esse modelo probabilístico será possível fazer as predições para uma determinada sentença
+
+HMM Decoding
+Dadas as matrizes A e B como entrada, assim como a sequência de palavras (observações), o objetivo é encontrar a sequência de tags mais prováveis.
+Teorema de Bayes
+Suposições:
+A probabilidade de uma palavra aparecer na sequência é independente da vizinhança e depende somente da sua tag;
+A probabilidade de uma tag depende somente da tag anterior
+Matriz A
+Matriz B
+Dado o modelo probabilístico é uma sequência de palavras o objetivo é encontrar a sequência de tags (classes gramaticais) mais prováveis para aquele texto
+
+Maximizar a probabilidade -> gerar a melhor sequência de tags (rótulos) t1
+
+HMM: O Algoritmo Viterbi
+Matriz A
+Matriz B
+Valores computados do corpus Wall Street Journal (WSJ)
+Entrada: Janet will back the bill
+É o algoritmo que vai fazer a decodificação do HMM para rotulagem de uma sentença dada como entrada
+
+Matriz A e B -> baseada no WSJ (Wall Street Journal) corpus
+
+JJ: Adjetivo
+VB: Verbo
+NNP: Substantivo Proprio
+MD: Modal
+DT: Determinante
+RB: Adverbio
+NN: Substantivo comum
+
+Programação Dinâmica
+
+HMM:
+O Algoritmo Viterbi
+Distribuição de probabilidade inicial. Na Matriz A é dado por <s>
+O Algoritmo começa pela distribuição de probabilidade inicial, essa rotulagem guiará a predição das próximas tags
+
+Após isso será desenvolvido o cálculo de forma a maximizar a probabilidade final da sentença inteira
+
+1 - A probabilidade um substantivo próprio (NNP) iniciar a sentença
+2 - A probabilidade de um substantivo próprio (NNP) ser Janet
+3 - Multiplica as duas probabilidade
+
+Faz isso para todas as tags. Seleciona a maior probabilidade
+
+BACKTRACE = Registra os estados anteriores para quando chegar ao final da sequência, saber qual o caminho correto percorrido.
+
+Sequencia final: NNP MD VB DT NN
+
+Células em Branco = São 0.
+
+“the” e “bill = a completar
+
+HMM: O Algoritmo Viterbi
+O valor de cada célula é computado recursivamente obtendo o caminho mais provável
+Sentença de entrada: janet will back the bill
+
+HMM
+É um modelo generativo: 
+modela como os dados foram gerados e depois aplica o que foi aprendido para classificar cada item da sequência
+Modela a distribuição de probabilidade conjunta
+Modelo útil e poderoso
+Problemas:
+Precisa de muitos dados para alcançar boa acurácia
+Dificuldade nas tarefas NLP: a existência de palavras desconhecidas
+Nomes próprios ou acrônimos por exemplo
+Limitação das features:
+Não diferencia maiúsculas ou minúsculas
+Não considera o contexto anterior da palavra
+
+Recurrent Neural Networks (RNN)
+
+Extração de Relações
+Citing high fuel prices, [ORG United Airlines] said [TIME Friday] it has increased fares by [MONEY $6] per round trip on flights to some cities also served by lower-cost carriers. [ORG American Airlines], a unit of [ORG AMR Corp.], immediately matched the move, spokesman [PER Tim Wagner] said. [ORG United], a unit of [ORG UAL Corp.], said the increase took effect [TIME Thursday] and applies to most routes where it competes against discount carriers, such as [LOC Chicago] to [LOC Dallas] and [LOC Denver] to [LOC San Francisco].
+
+Extração de Relações
+Já existem alguns padrões para detecção de relações
+
+PER = Pessoa
+GPE = Entidade Geo-Política
+ORG = Organização
+
+Extração de Relações Baseada em Padrões
+Padrões léxicos-sintáticos
+Hearst Patterns para extração de hipônimos
+“Agar is a substance prepared from a mixture of red algae, such as Gelidium, for laboratory or industrial use.”
+∀NPi, i ≥ 1, hyponym(NPi, NP0)
+hyponym(Gelidium, red algae)
+NP0 such as NP1{, NP2 . . . , (and|or)NPi}, i ≥ 1
+são palavras de sentido específico, ou seja, palavras cujos significados são hierarquicamente mais específicos do que de outras
+Heart Patterns -> Hipônimos
+
+NP: Noun Phrase -> Frase Substantiva  + “such as”
+
+NP0: red algae
+NP1: Gelidium
+
+NP1 é alga vermelha é hipônimo de Gelidium
+
+Gelidium é um hiperônimo de Alga Vermelha
+
+Extração de Relações Baseada em Padrões
+Hiperônimos são palavras de sentido genérico, ou seja, palavras cujos significados são mais abrangentes do que os hipônimos:
+
+Animais é hiperônimo de cachorro e cavalo.
+Legume é hiperônimo de batata e cenoura.
+Galáxia é hiperônimo de estrelas e planetas.
+Templos (hiponomio) = civic building (hipernomio)
+
+Herrick, GOldsmith, Shakespeare = Autores
+
+Canada, England = Common-law countries
+
+Extração de Relação Baseada em ML
+Definem-se as relações e entidades a serem extraídas
+Anotam-se exemplos para treinamento
+Detecção de entidades seguida da identificação de relações
+Features:
+BOW e bigramas nas entidades
+American, Airlines, Tim, Wagner, American Airlines, Tim Wagner
+Palavras ou bigramas ao redor
+Tipos das entidades
+Número de entidades entre as entidades candidatas
+Part-of-speech
+
+Extração de Relação Baseada em Redes Neurais
+Dado que a sentença possui um Substantivo próprio e um objeto relativo a localização
+O classificador obterá a probabilidade de a sentença conter uma relação de nascimento
+Entre essa pessoa e a cidade mencionados
+
+Relação = local de nascimento
+
+Aula Prática
+Extração de Informação com RNN
+
+Exercício Proposto
+Treine uma Rede Neural, agora a nível de tokens, para detecção de entidades nomeadas no conjunto de dados Conll 2002
+
+Referências
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/8.pdf>. Capítulo 8. Acesso em: 03 de Março de 2023.
+
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/21.pdf>. Capítulo 21. Acesso em: 03 Março de 2023.

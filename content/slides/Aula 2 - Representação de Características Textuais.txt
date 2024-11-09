@@ -1,0 +1,239 @@
+Processamento de Linguagem Natural
+Representação de Características Textuais
+Prof. Luciano Barbosa &
+Prof. Johny Moreira
+{luciano, jms5}@cin.ufpe.br
+
+Motivação
+Textos, palavras, suas sintaxes ou significados semânticos não são entendidos por máquinas (computadores)
+Necessário transformar o texto em números
+
+Representação Categórica
+One-hot encoding
+
+One Hot Encoding
+Cada palavra é mapeada para uma dimensão de um vetor
+O vetor gerado é a representação da palavra
+Abordagem simples
+4
+
+One Hot Encoding
+Dimensionalidade do tamanho do vocabulário
+Palavras similares podem apresentar representações muito diferentes
+5
+D1 : "o brasil sediou a copa" 
+= {[1,0,0,0,0,0],[0,1,0,0,0,0], [0,0,1,0,0,0], [0,0,0,0,1,0], [0,0,0,0,0,1]}
+D2 : "o brasil perdeu a copa" 
+= [1,0,0,0,0,0],[0,1,0,0,0,0], [0,0,0,1,0,0], [0,0,0,0,1,0], [0,0,0,0,0,1]
+V: {o, brasil, sediou, perdeu, a, copa}
+
+Codificação 
+o: 		[1,0,0,0,0,0]
+brasil: 	[0,1,0,0,0,0]
+sediou: 	[0,0,1,0,0,0]
+perdeu: 	[0,0,0,1,0,0]
+a:		[0,0,0,0,1,0]
+Copa:	[0,0,0,0,0,1]
+
+Representação Baseada em Pesos
+Bag-of-Words
+
+Bag of Words
+Não guarda a ordem
+Cada documento é representado por um vetor
+Dimensionalidade: 
+Tamanho do vocabulário
+Cada palavra tem um peso
+Simples e efetivo
+Considera apenas o aspecto léxico das unidades linguísticas
+Não modela similaridade semântica
+7
+D1 : "the cat sat on the hat" 
+D2 : "the dog ate the cat and the hat"
+V
+[the, cat, sat, on, hat, dog, ate, and]
+D1
+[2,     1,    1,    1,   1,     0,     0,    0]
+D2
+[3,     1,    0,    0,   1,     1,     1,    1]
+
+Peso dos Termos
+Termos em um documento não são igualmente úteis para descrever seu conteúdo
+Ex: palavras frequentes no documento -> importantes
+Ex: palavras que aparecem em todos documentos da coleção -> não importantes
+Peso usado para caracterizar a importância do termo
+
+
+TF - Term Frequency
+A importância do termo em um documento é proporcional à sua frequência em um documento 
+
+
+TF - Term Frequency
+Exemplo utilizando a variação do tf com log
+
+
+Inverse Document Frequency (IDF)
+Medir a especificidade de um termo
+O inverso do número de documentos nos quais o termo ocorre
+
+
+
+
+Inverse Document Frequency (IDF)
+Exemplo utilizando a variação do idf com log
+
+
+TFIDF
+Combinação do tf com o idf: tf x idf
+
+
+
+Aprendizagem de 
+Representação de Palavras
+Word Embeddings
+15
+
+Representation Learning
+Em modelos de ML, instâncias são representadas por características
+Motivação:
+A representação de instância/dados é essencial para modelos de ML eficazes
+Menos dependente da engenharia de características
+Redução de dimensionalidade
+Definição:
+Conjunto de técnicas que aprendem uma "melhor" representação dos dados brutos
+Representação distribuída ou embeddings
+Representação densa e de baixa dimensão
+Dimensões não têm significado
+
+16
+
+Exemplo de Representation Learning: MLP
+Diferentes níveis de abstração da entrada
+
+17
+
+Aprendizagem de Representação de Palavras:
+Word Embeddings
+Representam qualquer unidade linguística como um vetor denso
+Unidades: caracter, palavra, sentença ou documento
+Mapeia o significado semântico em um espaço geométrico (espaço dos embeddings)
+O contexto de uma palavra pode ser mapeado em um vetor de baixa dimensionalidade
+Palavras similares (em termos de contexto) estão próximas nesse espaço
+
+18
+
+Aprendizagem de Representação de Palavras:
+Word Embeddings
+Fonte: https://medium.com/@hari4om/word-embedding-d816f643140
+19
+
+Técnicas para criação
+Modelos baseado em frequência (LSI)
+Modelos baseado em predição (redes neurais)
+Aprendizagem de Representação de Palavras:
+Word Embeddings
+20
+
+Word2Vec
+CBOW e Skip-gram
+21
+
+Word2Vec: CBOW
+Fonte: https://thinkinfi.com/continuous-bag-of-words-cbow-multi-word-model-how-it-works/
+
+Prevê a representação de uma palavra, dado o seu contexto 
+
+22
+
+Word2Vec: CBOW
+word context
+(one-hot encoding)
+distribuição de probabilidade das palavras no corpus 
+representação 
+da palavra
+Fonte: https://arxiv.org/pdf/1411.2738v3.pdf
+23
+Dimensão das entradas e saída: tamanho do vocabulário
+
+N distribuições de probabilidade das palavras no corpus
+word
+(one-hot encoding)
+Dada uma palavra como entrada, prevê o seu contexto.
+Word2Vec: Skip-gram
+Fonte: https://arxiv.org/pdf/1411.2738v3.pdf
+representação 
+da palavra
+Input word
+24
+
+Modelos anteriores são muito custosos
+Prevê palavras como vizinhas
+Exemplos negativos: palavras que não são vizinhas
+Entradas:
+Palavra e seu contexto
+Saída:
+Probabilidade de matching
+Word2Vec: Skip-gram with Negative Sampling
+
+Word2Vec: Skip-gram with Negative Sampling
+Fonte: https://jalammar.github.io/illustrated-word2vec/
+
+Exemplos de Embeddings
+27
+
+Exemplos de Embeddings
+28
+
+Exemplos de Embeddings
+29
+
+Embeddings
+Na maioria das redes para texto, word embeddings é a entrada padrão
+Qual é o melhor é difícil dizer:
+Use vetores pré-treinados disponíveis (você também pode criar o seu)
+Seleção de corpus e ajuste dos parâmetros para a uma dada tarefa:
+Por exemplo. Para análise de sentimento, as palavras "bom" e "ruim" devem estar distantes no espaço vetorial
+30
+
+Modelos amplamente utilizados
+Word2Vec
+https://code.google.com/p/word2vec/
+
+Glove
+http://nlp.stanford.edu/projects/glove/ 
+
+FastText
+https://fasttext.cc/ 
+
+Doc2Vec
+https://radimrehurek.com/gensim/models/doc2vec.html 
+31
+
+Exemplo para Representação de Anúncios
+32
+
+Exemplo para Representação de Anúncios
+33
+
+34
+Aula Prática
+Google Colab
+
+Resumo da Aula
+Representação Textual Categórica: one-hot encoding
+Representação Textual baseada em Contagem: bag-of-words
+Representação baseada em Aprendizagem: Word2Vec
+Prática:
+Classificação de Textos em Grupos de Notícias (fetch_20newsgroups)
+Classificação de Sentimento - predição da contagem de estrelas de uma review de produtos (Amazon Review Corpus - Fashion)
+35
+
+36
+Exercício Proposto
+Google Colab
+
+REFERÊNCIAS
+JURAFSKY, Daniel; MARTIN, James H. Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition. https://web.stanford.edu/~jurafsky/slp3/. 
+MIKOLOV, Tomas et al. Efficient estimation of word representations in vector space. arXiv preprint arXiv:1301.3781, 2013.
+PENNINGTON, Jeffrey; SOCHER, Richard; MANNING, Christopher D. Glove: Global vectors for word representation. In: Proceedings of the 2014 conference on empirical methods in natural language processing (EMNLP). 2014. p. 1532-1543.
+37

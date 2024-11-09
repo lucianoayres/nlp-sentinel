@@ -1,0 +1,196 @@
+Processamento de Linguagem Natural
+Processamento de Texto
+Prof. Luciano Barbosa &
+Prof. Johny Moreira
+{luciano, jms5}@cin.ufpe.br
+
+Fatores que Influenciam a Construção de um Texto
+
+ African American English (AAF)
+
+iont
+talmbout
+Mainstream American English (MAE)
+I don’t
+talking about
+Quem escreveu (idade, gênero, classe social)
+Quando foi escrito
+Finalidade: 
+notícia, artigos científicos, livros de romance, tweets ou postagem na internet
+Língua: 7097 línguas no mundo
+Combinação de línguas e dialetos
+Dialetos regionais
+“Code switching”
+Por primera vez veo a @username actually being hateful! it was beautiful:)
+[Pela primeira vez vejo a @nomedeusuario sendo realmente odiosa! Foi lindo:)]
+dost tha or ra- hega ... dont wory ... but dherya rakhe
+[Ele foi e continuará sendo um amigo… não se preocupe… mas tenha fé]
+
+Etapas de Processamento de Texto
+Tokenização de palavras
+Normalização de palavras
+Segmentação de sentenças
+
+
+Tokenização
+Quebrar sequência de caracteres em palavras
+Exemplo de abordagens simples:
+Qualquer sequência de caracteres alfanuméricos de tamanho mínimo 3
+Terminado em espaço
+Terminado em algum caracter especial
+Bigcorp’s 2007 bi-annual report showed profits rose 10%
+["bigcorp","2007","annual","report","showed","profits","rose"]
+
+Tokenização
+Quebrar sequência de caracteres em palavras
+Exemplo de abordagens simples:
+Qualquer sequência de caracteres alfanuméricos de tamanho mínimo 3
+Terminado em espaço
+Terminado em algum caracter especial
+Mr. O’Neill thinks that the boys’ stories about Chile’s capital aren’t amusing
+["mr","neill","thinks","that","the","boys","stories","about","chile","capital","aren","amusing"]
+
+Tokenização: Dificuldades
+Palavras pequenas podem ser importantes para o significado
+Ex: am, pm, el (paso), (world war) II
+Hífens
+Algumas vezes são necessários
+Ex: e-bay, cd-rom, t-shirts, guarda-chuva, bem-te-vi
+Palavras separadas
+Ex.: Dallas-Fort Worth, spanish-speaking
+
+Tokenização: Dificuldades
+Caracteres especiais são importantes para URL, tags, preços e código em documentos
+AT&T, R$45.55, 01/02/06, #NLPRules, usuario@gmail.com
+Apóstrofo pode ser parte de uma palavra ou parte de um possessivo (inglês)
+
+Tokenização: Dificuldades
+Números podem ser importantesEx: nokia 3250, united 93, quicktime 6.5 pro
+Pontos podem estar em números, abreviações, URLs, fim de sentenças etcEx: I.B.M., Ph.D., U.S.A., N.S.A
+
+Tokenização: Dificuldades
+Linguagens como Chinês, Japonês e Tailandês que não usam espaços para demarcar limites de palavras
+Cada caractere representa uma unidade de significado (morfema)
+Decidir o que é uma palavra em linguagens do tipo é mais complexo
+Texto em chinês
+
+Tokenização: Dificuldades
+Texto em japonês
+
+Tokenização: Dificuldades
+姚明进入总决赛 
+(“Yao Ming reaches the finals”)
+姚明       进入      总决赛
+YaoMing      reaches         finals
+姚    明    进入     总      决赛
+Yao    Ming      reaches     overall       finals
+姚    明    进    入     总       决     赛
+Yao    Ming     enter   enter     overall       decision    game
+1 - Segmentação Chinese Treebank 
+(3 palavras)
+2 - Segmentação Peking University
+(5 palavras)
+3 - Segmentação por caracteres
+(7 palavras)
+
+Tokenização: Ambiguidade
+Fonte: https://nlp.stanford.edu/IR-book/ - Capítulo 2 - The term vocabulary & postings lists
+
+Tokenização: Substantivos compostos sem espaços
+computerlinguistik
+computer + linguistik
+computational linguistics
+lebensversicherungsgesellschaftsangestellter
+leben + versicherung + gesellschaft + angestellter
+life insurance company employee
+Exemplos em Alemão:
+
+Tokenização: Morfologia complexa
+Palavra Turca: 
+Uygarlastiramadiklarimizdanmissinizcasina
+“(behaving) as if you are among those whom we could not civilize”
+
+Uygar “civilized” + las “become” + tir “cause” + ama “not able” 
++ dik “past” + lar “plural” + imiz “p1pl” + 
+dan “abl” + mis “past” + siniz “2pl” + casina “as if”
+
+Normalização
+É a tarefa de colocar as palavras/tokens em um formato padrão
+Objetivo: compactação do texto
+Existe perda de informação 
+Exemplo: transformação de caixa (maiúsculas > minúsculas)
+Não recomendável em alguns casos: extração de informação e tradução
+Sem Transformação
+Com Transformação
+Peru (País)
+peru (ave)
+UNE (organização)
+une (unir)
+US (País)
+us ( nós em inglês)
+Apple (empresa)
+apple (fruta)
+
+Normalização: Stopwords
+Palavras que aparecem muito na coleção
+Não possuem um significado bem definido
+Usualmente, não são boas para diferenciar
+Artigos, preposições, conjunções etc
+Criadas a partir de palavras com alta frequência ou de listas existentes
+Ex: Stopwords em Português (https://gist.github.com/alopes/5358189)
+Fonte: https://nlp.stanford.edu/IR-book/ - Capítulo 2 - The term vocabulary & postings lists
+
+Normalização: Lematização
+Agrupar palavras com mesma raiz (lemma)
+Verbos no passado são colocados no presente
+Sinônimos são unificados
+foi → vai
+melhor → bom
+correr, corre, correu → correr
+quero, queres, quereres → querer
+am, are, is → be
+car, cars, car's, cars' → car
+He is reading detective stories → He be read detective story
+
+Normalização: Stemming
+Reduz variações morfológicas das palavras para um stem em comum
+Remove prefixo ou sufixo -> stem
+Exemplo 
+Palavras: connected, connecting, connection, connections
+Stem: connect
+Não há um consenso sobre benefícios (depende da língua/tarefa)
+
+Stemming: Porter Stemmer
+Um dos mais utilizados
+Consiste de uma série de regras executadas em cascata
+Comete erros e difícil de modificar
+Exemplo de regras
+
+Efeito de Normalização no Corpus Reuters-RCV1
+
+Segmentação de Sentenças
+Caracteres ! e ? são precisos para separar
+Caracter “.” nem tanto
+Abreviação: Dr.
+Número: 7.5%
+Estratégia mais usada:
+Toqueniza primeiro
+Usa regras ou Machine Learning para classificar o ponto
+Uso de dicionário de abreviação
+
+Ferramentas e Bibliotecas
+Stanford tokenizer para inglês (http://nlp.stanford.edu/software/tokenizer.shtml)
+CoreNLP (https://stanfordnlp.github.io/CoreNLP/)
+NLTK (https://www.nltk.org/)
+Spacy (https://spacy.io/)
+
+Aula Prática
+Google Colab
+
+Exercício Proposto
+Google Colab
+
+Referências
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/2.pdf>. Capítulo 2. Acesso em: 01 Setembro de 2022.
+Christopher D. Manning, Prabhakar Raghavan and Hinrich Schütze, Introduction to Information Retrieval, Cambridge University Press. 2008. Disponível em: <https://nlp.stanford.edu/IR-book/>. Capítulo 2. Acesso em: 01 Setembro de 2022.
+Recursos e Ferramentas para a Lingua Portuguesa http://www.nilc.icmc.usp.br/nilc/index.php/tools-and-resources 

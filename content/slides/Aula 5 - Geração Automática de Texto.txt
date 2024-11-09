@@ -1,0 +1,601 @@
+Processamento de Linguagem Natural
+Geração Automática de Texto
+
+Geração Automática de Texto
+Natural Language Generation (NLG)
+Tarefa de produzir texto coerente a partir de dados estruturados ou não estruturados
+Utilizados para diversas tarefas
+
+Aplicações
+FONTE: http://demo.clab.cs.cmu.edu/NLP/S21/files/slides/23-NLP_Generation.pdf 
+
+Aplicações
+FONTE: http://demo.clab.cs.cmu.edu/NLP/S21/files/slides/23-NLP_Generation.pdf 
+
+Aplicações
+FONTE: http://demo.clab.cs.cmu.edu/NLP/S21/files/slides/23-NLP_Generation.pdf 
+
+Modelos Neurais de NLG
+Visão Geral
+
+Modelo Auto-Regressivo
+FONTE: http://web.stanford.edu/class/cs224n/slides/cs224n-2021-lecture12-generation.pdf 
+
+Modelo Auto-Regressivo
+FONTE: http://web.stanford.edu/class/cs224n/slides/cs224n-2021-lecture12-generation.pdf 
+
+Modelo Auto-Regressivo
+FONTE: http://web.stanford.edu/class/cs224n/slides/cs224n-2021-lecture12-generation.pdf 
+
+Decoding: Greedy Search
+FONTE: https://huggingface.co/blog/how-to-generate
+Seleciona a próxima palavra com base na probabilidade máxima
+Perda de diversificação no texto gerado
+
+Decoding: Beam Search
+FONTE: https://huggingface.co/blog/how-to-generate
+Mantém um num_beams de hipóteses que nos passos futuros podem apresentar probabilidade máxima
+
+Decoding: Beam Search
+Pode gerar repetição ou textos “monótonos”
+Problema geral em geração de texto
+FONTE: https://arxiv.org/pdf/1904.09751.pdf
+Falta de diversificação na geração do texto
+
+Humanos vs Beam Search
+Linguagem humana de alta qualidade não segue uma distribuição máxima de palavras.
+É preciso que o texto surpreenda, não seja previsível
+FONTE: https://arxiv.org/pdf/1904.09751.pdf
+
+Decoding: Random Sampling
+wt​∼P(w∣w1:t−1​)
+Distribuição de probabilidade condicional
+O modelo de linguagem passa a ser não-determinístico
+FONTE: https://huggingface.co/blog/how-to-generate
+A randomicidade não pode ser feita de qualquer forma. Pois, pode apresentar problemas do tipo:
+-> Texto desconexo
+-> Texto sem sentido
+-> Geração totalmente aleatória
+
+
+Decoding: Random Sampling
+
+wt​∼P(w∣w1:t−1​)
+Distribuição de probabilidade condicional
+Pode gerar texto incoerente
+FONTE: https://huggingface.co/blog/how-to-generate
+
+Softmax Temperature
+Regula a diversidade da saída: τ
+
+
+
+Valores de τ > 1: Pt mais distribuída pelo vocabulário (saída mais diversa)
+Valores de τ < 1: Pt mais concentrada nas palavras com maior probabilidade (saída menos diversa) 
+τ→0 = greedy decoding
+Resolvendo a previsibilidade.
+Deixa a seleção da próxima palavra menos randômica.
+Diminuir a temperatura, aumenta a coerência
+
+Softmax Temperature
+FONTE: https://huggingface.co/blog/how-to-generate
+τ = 1
+τ = 0.7
+
+Decoding: Top-K Sampling
+
+FONTE: https://huggingface.co/blog/how-to-generate
+Filtra as k palavras mais prováveis
+A distribuição de probabilidade é redistribuída entre essas palavras
+
+
+Decoding: Top-p (Nucleus) Sampling
+
+FONTE: https://huggingface.co/blog/how-to-generate
+Escolhe entre o menor conjunto de palavras cuja probabilidade cumulativa ultrapassa o valor de p
+A distribuição de probabilidade é redistribuída
+Ex.: p=0.9
+
+Qual o menor número de palavras cuja probabilidade cumulativa é maior que “p”?
+p=0.9
+
+Decoding
+Top-p and top-K em geral produzem texto de melhor qualidade que Greedy e Beam Search
+Modelos permitem utilizar uma combinação dessas abordagens
+
+NLG: Avaliação de Modelos
+
+NLG: Avaliação de Modelos por sobreposição
+Rápido, eficiente e bastante utilizado
+Pontuação indicando a similaridade entre o texto gerado e o esperado (escrito por humano)
+Métricas baseadas em overlaps de n-grams
+BLEU, ROUGE, METEOR, CIDEr, etc.
+Métricas baseadas em semântica
+PYRAMID, SPICE, SPIDEr, etc.
+
+Avaliação
+ROUGE
+Sumarização Textual
+Compara um sumário a um ou mais sumários de referência
+Orientada a revocação
+BLEU Score
+Tradução
+Compara a tradução gerada com referências escritas por humanos
+Orientada a precisão
+João ama tomar café.
+unigrama
+bigrama
+n-grama
+
+Desafios: avaliação dos modelos “Tunados”
+João ama tomar café.
+João adora beber café.
+ROUGE-1
+# matches de unigramas
+# unigramas na referência
+=
+Referência
+Gerado
+ROUGE-1
+# matches de unigramas
+# unigramas na saída gerada
+=
+=
+=
+2
+4
+2
+4
+Precision
+Recall
+ROUGE-1
+ROUGE-2
+…
+ROUGE-L
+Subsequência comum mais longa
+ROUGE
+Sumarização Textual
+Compara um sumário a um ou mais sumários de referência
+Orientada a revocação
+=
+0.5
+=
+0.5
+https://aclanthology.org/W04-1013/ 
+
+Avaliação: ROUGE
+
+João ama tomar café.
+ROUGE-1
+# matches de unigramas
+# unigramas na referência
+=
+Referência
+Gerado
+ROUGE-1
+# matches de unigramas
+# unigramas na saída gerada
+=
+=
+=
+4
+4
+Precision
+Recall
+ROUGE-1
+ROUGE-2
+…
+ROUGE-L
+Subsequência comum mais longa
+Tomar João café ama.
+ROUGE
+Sumarização Textual
+Compara um sumário a um ou mais sumários de referência
+Orientada a revocação
+=
+1.0
+4
+4
+=
+1.0
+https://aclanthology.org/W04-1013/ 
+
+Avaliação: BLEU Score
+Tradução
+Compara a tradução gerada com referências escritas por humanos
+Orientada a precisão
+Penalidade de Brevidade: penaliza as gerações curtas
+BLEU = min( 1, 
+tamanho da geração
+tamanho da referência
+)(П precisioni)1/4
+4
+i=1
+overlap de n-gramas
+penalidade de brevidade
+https://aclanthology.org/P02-1040.pdf 
+
+Avaliação: BERTScore
+FONTES:
+https://huggingface.co/spaces/evaluate-metric/bertscore 
+https://arxiv.org/pdf/1904.09675.pdf 
+https://github.com/Tiiiger/bert_score 
+
+Como explorar Modelos de Linguagem?
+Prompt Engineering
+Fine-tuning
+
+Translate English to Portuguese:
+house =>
+Translate English to Portuguese:
+house => casa
+O que é um prompt?
+É o texto dado como entrada ao modelo
+LLM
+PROMPT
+SAÍDA
+INFERÊNCIA
+Janela de Contexto
+* Resultado obtido com o ChatGPT
+
+Translate English to Portuguese:
+house => casa
+O que é um prompt?
+É o texto dado como entrada ao modelo
+LLM
+PROMPT
+SAÍDA
+INFERÊNCIA
+In-Context Learning: Zero-shot
+Translate English to Portuguese:
+house =>
+* Resultado obtido com o ChatGPT
+
+Translate English to Portuguese:
+house => casa
+bakery => padaria
+bread => pão
+coffee => café
+Translate English to Portuguese:
+house => casa
+bakery => padaria
+bread => pão
+coffee => 
+O que é um prompt?
+LLM
+PROMPT
+SAÍDA
+INFERÊNCIA
+In-Context Learning: Few-shot
+* Resultado obtido com o ChatGPT
+
+Tamanho da Janela de Contexto
+FONTE:
+[1] https://www.cerebras.net/blog/variable-sequence-length-training-for-long-context-large-language-models/
+[2] https://www.mosaicml.com/blog/mpt-7b  
+[3]https://www.cerebras.net/blog/cerebras-gpt-a-family-of-open-compute-efficient-large-language-models/ 
+[4] https://developers.generativeai.google/models/language 
+MPT-7B-StoryWriter-65k+
+* Figura original obtida de [1] e alterada para inclusão do modelo open-source MPT-7B-StoryWriter-65k+ [2]
+closed models
+OPEN MODELS
+
+[3] Cerebras-GPT
+Abril (2023)
+Sequence Length: 2048
+
+[4] PALM 2
+Maio (2023)
+Sequence Length: 8K
+
+Prompt Engineering: Limitações
+Tamanho da janela de contexto é limitado
+Requer esforço humano para construção e melhoria de prompts
+Um mesmo prompt pode entregar saídas diferentes
+Inconsistência na experiência com usuário
+Melhores saídas geralmente são obtidas com o uso repetitivo de prompts, em um formato conversacional 
+
+Por que utilizar modelos Open-Source?
+Fine-tuning: Não precisar treinar do zero ou depender apenas de prompt engineering
+OpenAI disponibiliza fine-tuning apenas para alguns modelos através de sua API
+Não depender de terceiros
+Perda de disponibilidade do serviço
+Alteração nos custos do serviço
+Latência
+Moderação e Segurança: dados sendo transmitidos para terceiros
+Controle total sobre qualquer operação
+Mais customizáveis
+Privados
+Existem modelos abertos com menor número de parâmetros mas com performance competitiva
+LLaMA (65B) apresenta maior performance que GPT-3 (175B) e PaLM (540B) [1]
+Chinchilla (70B) apresenta maior performance que GPT-3 (175B) and Gopher (280B) [2]
+[1] https://arxiv.org/abs/2302.13971
+[2] https://arxiv.org/pdf/2203.15556.pdf 
+
+Limitação de LLMs Pré-treinados
+
+Generalistas e não respondem bem a instruções
+LLM Pré-treinado
+
+Supervised Fine-tuning
+Treina o LLM com instruções variadas ou focadas em uma única tarefa
+https://vitalflux.com/instruction-fine-tuning-llm-explained-with-examples/
+
+Exemplos de Instruções
+Fonte: https://huyenchip.com/2023/05/02/rlhf.html
+https://cameronrwolfe.substack.com/p/understanding-and-using-supervised
+
+Resultado do Fine-tuning
+https://vitalflux.com/instruction-fine-tuning-llm-explained-with-examples/
+
+Exemplo de Saídas de Modelos sem e com Fine-tuning
+LLMs Pré-treinados (sem fine-tuning)
+LLMs após Fine-tuning
+Tarefa: responder comentários ruins sobre restaurantes
+
+Fine-tuning
+É possível obter bons resultados a partir de um pequeno conjunto de dados
+Full fine-tuning demanda bastante recursos computacionais
+
+Fine-tuning: Diminuindo os custos computacionais e de armazenamento
+Técnicas para redução do número de pesos “tunáveis” dos modelos
+Parameter-Efficient Fine-Tuning (PEFT)
+Quantização: Técnica para “tunagem” de parâmetros com menor precisão numérica
+Apesar dos esforços, treino e inferência ainda demandam bastantes recursos computacionais
+
+https://github.com/huggingface/peft 
+
+Parameter Efficient Fine-Tuning (PEFT)
+Permite a adaptação do fine-tuning de um LLM pré-treinado
+Congelam pesos ou camadas do modelo
+Atualizam apenas alguns pesos ou camadas
+Adicionam camadas ou parâmetros
+Diminuem os custos computacionais e de armazenamento
+Performance comparável ao fine-tuning completo do LLM
+Menos propenso a esquecimento catastrófico durante fine-tuning completo
+FONTE: https://arxiv.org/pdf/2303.15647v1.pdf 
+
+LLM pré-treinado
+Low-Rank Adaptation (LoRA)
+Entrada X
+Pesos pré-treinados
+W
+Embedding h
+Congela os pesos originais do modelo
+FONTE: https://arxiv.org/abs/2106.09685 
+
+LLM pré-treinado
+Low-Rank Adaptation (LoRA)
+Entrada X
+Pesos pré-treinados
+W
+Embedding h
+WA
+WB
+Congela os pesos originais do modelo
+Injeta duas matrizes menores de decomposição que multiplicadas aproximam W
+
+FONTE: https://arxiv.org/abs/2106.09685 
+
+LLM pré-treinado
+Low-Rank Adaptation (LoRA)
+Entrada X
+Pesos pré-treinados
+W
+Embedding h
+WA
+WB
+Congela os pesos originais do modelo
+Injeta duas matrizes menores de decomposição que multiplicadas aproximam W
+r
+=
+X
+WB
+WA
+W
+A, r
+r, B
+FONTE: https://arxiv.org/abs/2106.09685 
+rank
+default=8
+
+LLM pré-treinado
+Low-Rank Adaptation (LoRA)
+Entrada X
+Pesos pré-treinados
+W
+Embedding h
+WA
+WB
++
+Congela os pesos originais do modelo
+Injeta duas matrizes menores de decomposição que multiplicadas aproximam W 
+
+r
+=
+X
+WB
+WA
+W
+A, r
+r, B
+Treina os pesos das matrizes de decomposição
+Adiciona os pesos aprendidos aos congelados
+W
+WA X WB
++
+FONTE: https://arxiv.org/abs/2106.09685 
+rank
+default=8
+
+Low-Rank Adaptation (LoRA)
+Reduz o número de parâmetros treináveis
+Possibilita a execução do fine-tuning com menos recursos computacionais
+Possibilita Inferência mais customizada:
+Adicionando as matrizes de decomposição, aprendidas anteriormente, aos pesos congelados do modelo em tempo de inferência
+FONTE: https://arxiv.org/abs/2106.09685 
+
+Quantização
+PRECISÃO
+MEMORY
+EXEMPLO
+FP32
+4 bytes
+3.1415920257568359375
+FP16
+2 bytes
+3.140625
+INT8
+1 Byte
+3
+Técnica que reduz a quantidade de memória necessária para armazenar e treinar modelos
+Projeta os valores originais com precisão de 32 bits em espaços de precisão menor.
+Quantização + LoRA = QLoRA
+https://huggingface.co/docs/transformers/perf_train_gpu_one#mixed-precision-training 
+https://huggingface.co/docs/transformers/model_memory_anatomy 
+https://cloud.google.com/tpu/docs/bfloat16 
+QLoRA: https://arxiv.org/abs/2305.14314 
+2GB @ 16-bit
+half precision
+4GB @ 32-bit
+full precision
+1GB @ 8-bit
+precision
+Armazenar 1B parâmetros
+
+Desafios: Alucinação
+Fonte: https://www.theverge.com/2023/5/27/23739913/chatgpt-ai-lawsuit-avianca-airlines-chatbot-research
+
+Desafios: Informação Desatualizada
+
+Retrieval Augmented Generation (RAG)
+Adição de conteúdo como entrada para a geração de texto
+Consulta
+Saída gerada entregue ao usuário
+Busca
+Documentos relevantes
++
+Prompt aumentado com contexto adicional
+Qual a proporção de candidatos negros ou pardos …  
+50% dos ... 
+LLM
+Base de dados 
+do domínio
+
+Resultado da Adição de Conteúdo para 
+Geração do Texto 
+
+Desafios: Deployment de Aplicações baseadas em LLMs
+Treino e Inferência
+Treino do zero:
+Muitos dados
+Requer muita memória
+Demanda poder computacional
+Inferência com CPU: Técnicas de conversão para C++ [1]
+4GB @ 32-bit
+full precision
+80GB @ 32-bit
+full precision
+Armazenar
+Treinar
+LLM
+1B
+[1] 
+https://github.com/ggerganov/llama.cpp
+https://pub.towardsai.net/high-speed-inference-with-llama-cpp-and-vicuna-on-cpu-136d28e7887b 
+
+Treino e Inferência
+Treino do zero:
+Muitos dados
+Requer muita memória
+Demanda poder computacional
+Inferência com CPU: Técnicas de conversão para C++ [1]
+Modelos generalistas pré-treinados
+Formato de Saída ambíguo
+Experiência do Usuário se torna inconsistente
+Engenharia de Prompt
+LLM
+pré-treinado
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+Prompt
+Input
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkkauhsiauhauishuiauhsiaushiauhsiuahsiuahsiuahsiuhaiu
+Generated Text
+Output
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+Generated Text
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkkshshaiuhsiaushiauhsiauhsiauhsiuahsiuhaiushaiuhsuiahsiuahshausiuahsiuahsuihaiushaiuhsuiahsuai
+Generated Text
+[1] 
+https://github.com/ggerganov/llama.cpp
+https://pub.towardsai.net/high-speed-inference-with-llama-cpp-and-vicuna-on-cpu-136d28e7887b 
+Desafios: Deployment de Aplicações baseadas em LLMs
+
+Treino e Inferência
+Treino do zero:
+Muitos dados
+Requer muita memória
+Demanda poder computacional
+Inferência com CPU: Técnicas de conversão para C++ [1]
+Modelos generalistas pré-treinados
+Formato de Saída ambíguo
+Experiência do Usuário se torna inconsistente
+Engenharia de Prompt
+Escalabilidade
+LLM
+pré-treinado
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+Prompt
+Input
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+asakjshkjahskjhkjahsjkhkajshkajshkjhskjahskjahskjahskjakjshjkahskjahkjshakjhskjahskjahkjsjakskjahskjahskjahskjhakjshkjahskjahsjkk
+…
+[1] 
+https://github.com/ggerganov/llama.cpp
+https://pub.towardsai.net/high-speed-inference-with-llama-cpp-and-vicuna-on-cpu-136d28e7887b 
+Desafios: Deployment de Aplicações baseadas em LLMs
+
+Ética em Modelos de NLG: Tay Chatbot
+Chatbot criado pela MS em 2016
+Em 24 horas, começou a fazer comentários racistas, sexistas, seguindo estereótipos negativos e aprendendo padrões nocivos
+Criados a partir do language model (viés no corpus)
+Sheng et al., EMNLP 2019
+
+Ética em Modelos de NLG
+Viés de Gênero
+
+Ética em Modelos de NLG
+Viés de Gênero
+Privacidade e Anonimato
+
+Ética em Modelos de NLG
+Viés de Gênero
+Privacidade e Anonimato
+GPT-2 Release. FONTE: https://www.theguardian.com/technology/2019/feb/14/elon-musk-backed-ai-writes-convincing-news-fiction 
+
+Ética em Modelos de NLG
+Viés de Gênero
+Privacidade e Anonimato
+Criação de Notícias Falsas
+GPT-2 Release. FONTE: https://www.theguardian.com/technology/2019/feb/14/elon-musk-backed-ai-writes-convincing-news-fiction 
+
+https://www.technologyreview.com/2023/02/14/1068498/why-you-shouldnt-trust-ai-search-engines
+Ética em Modelos de NLG
+
+https://time.com/6247678/openai-chatgpt-kenya-workers/
+Ética em Modelos de NLG
+
+Referências
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/7.pdf>. Capítulo 6. Acesso em: 01 Setembro de 2022.
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/11.pdf>. Capítulo 11. Acesso em: 01 Setembro de 2022.
+https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html
+Tokenizers: How machines read. Disponível em: <https://blog.floydhub.com/tokenization-nlp/>. Acesso em: 01 Setembro de 2022. 
+Data Science Academy. Deep Learning Book, 2022. Disponível em: <https://www.deeplearningbook.com.br/>. Capítulos: 76 a 82. Acesso em: 01 Setembro. 2022.
+Data Science Academy. Deep Learning Book, 2022. Disponível em: <https://www.deeplearningbook.com.br/>. Capítulos: 86 a 90. Acesso em: 01 Setembro. 2022.
+
+Aula Prática
+Google Colab Text Generation com Transformers
+

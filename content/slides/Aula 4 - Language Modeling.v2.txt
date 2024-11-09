@@ -1,0 +1,693 @@
+Processamento de Linguagem Natural
+Modelos de Linguagem
+
+Objetivo Principal
+Tarefa de predizer próximas palavras
+
+
+
+
+Computar a probabilidade da próxima palavra dada uma sequência
+
+Computar a probabilidade de uma sequência de palavras
+P(W5|W1,W2,W3,W4)
+P(W1,W2,W3,W4W5…Wn)
+
+
+
+
+
+
+
+Computando as Probabilidades
+P(“its water is so transparent”) = P(its, water, is, so, transparent) =P(its) × P(water| its) × P(is | its, water) × 				P(so | its, water, is) × P(transparent | its, water, is, so)
+p(B|A) = 
+P(A,B)
+P(A)
+P(A,B) = P(A) × P(B|A)
+P(A, B, C, D) = P(A) × P(B|A) × P(C|A,B) × P(D|A,B,C)
+P(x1, x2, x3,..., xn) = P(x1) × P(x2|x1) × P(x3|x1,x2) × P(xn|x1,x2,x3,…,xn-1)
+Ex: P(“its water is so transparent”) 
+
+Calculando as probabilidades
+Baseado na frequência em um corpus de dados
+Problema: n-grams grandes são raros
+N-grams: sequência de n palavras consecutivas
+
+Utilizando somente as k palavras mais próximas
+Calculando as probabilidades: Markov Assumption
+Utilizando bigramas (a palavra anterior)
+N-gram: trigrams, 4-grams, 5-grams
+– Linguagem tem dependências de longa distância
+
+Ex: “The computer which I had just put into the machine room on the fifth floor crashed”
+
+Calculando as probabilidades:
+Maximum Likelihood Estimate (Estimativa de Probabilidade Máxima)
+p(wi|wi-1) = 
+c(wi-1,wi)
+c(wi-1)
+<s> I am Sam </s>
+<s> Sam I am</s>
+<s> I do not like green eggs and ham</s>
+
+Calculando as probabilidades:
+P(<s> I want english food </s>) = P(I | <s>) × P(want | I) × 								P(english | want) × P(food | english) × 								P(</s> | food)
+P(<s> I want english food </s>) = .000031 
+Cálculo em log
+– Evitar overflow
+– Adicionar é mais rápido que multiplicar
+log(p1, p2, p3, p4) = log p1 + log p2 + 
+log p3 + log p4
+
+Gerando Sentenças
+I
+II
+III
+
+Modelos Neurais de Linguagem
+
+Recurrent Neural Networks (RNN)
+
+Recurrent Neural Networks (RNN)
+Vantagens
+Pode processar sequência de qualquer tamanho
+Modelo não aumenta com o tamanho da sequência
+Usa informação anterior
+Mesmos pesos utilizados em cada passo
+Desvantagens
+Lenta
+Na prática, tem dificuldade em guardar informação de palavras muito anteriores
+
+Transformers & Modelos de Linguagem Pré-treinados
+
+Transformers
+É o estado-da-arte para o Processamento de Linguagem Natural
+É uma arquitetura de Deep Learning que visa resolver tarefas sequence-to-sequence com dependências de longo alcance
+Não usa RNN ou Convolução
+Não exige que os dados sequenciais sejam processados ​​em ordem
+Permite maior paralelização
+Diferentes tarefas: classificação, extração, geração de texto e busca
+
+
+Transformers: Arquitetura
+Fonte: https://huggingface.co/course/chapter1/4
+Encoder: constrói uma representação da entrada 
+Decoder: gera probabilidades baseado na saída do encoder e outras entradas
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Transformers
+Representação das palavras na camada de entrada
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Word Embedding Tradicional
+Vocabulário construído pelo conjunto de treinamento
+Palavras não presentes mapeadas para UNK
+
+Subword Tokenization
+Crítico para línguas com muitas variações na estrutura das palavras
+Ex: Swahili
+
+Subword Tokenization
+Palavras raras são quebradas em substrings
+Palavras frequentes são mantidas
+Tamanho do vocabulário é um parâmetro
+
+Byte-pair Encoding
+Objetivo: representar o corpus com a menor quantidade de tokens
+Algoritmo:
+Inicia o vocabulário com todos os caracteres e símbolo “fim de palavra”
+Une dois tokens com maior frequência
+Decrementa a frequência dos dois tokens
+Repetir até o vocabulário desejado
+
+BPE: Palavras no Corpus
+
+BPE: Caracteres no Corpus
+https://blog.floydhub.com/tokenization-nlp/
+
+BPE: Merge
+https://blog.floydhub.com/tokenization-nlp/
+
+BPE
+
+Wordpiece
+Similar ao BPE
+Algoritmo:
+Inicia o vocabulário com todos os caracteres e o símbolo de "fim da palavra"
+Une os tokens com maior score
+Diminui a frequência dos dois tokens
+Repete até o vocabulário desejado (por exemplo, tamanho de vocabulário pré-definido)
+
+Wordpiece
+
+
+Word
+Token(s)
+surf
+['surf']
+surfing
+['surf', '##ing']
+surfboarding
+['surf', '##board', '##ing']
+surfboard
+['surf', '##board']
+snowboard
+['snow', '##board']
+snowboarding
+['snow', '##board', '##ing']
+snow
+['snow']
+snowing
+['snow', '##ing']
+https://huggingface.co/course/chapter6/6
+
+Transformers
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Positional Encoding
+Tokens são processados pelo Transformer de forma não ordenada
+Positional Encoding introduz ordem aos tokens que são manipulados pelo Transformer
+Assim, o modelo aprende representações diferentes para uma palavra dependendo da sua posição
+
+Positional Encoding
+https://jalammar.github.io/illustrated-transformer/
+
+Cálculo do Posicional (Sinusoidal)
+pos: posição do token na frase
+i: dimensão no embedding
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Mecanismo de Atenção
+
+Contextual Representations
+Limitação de word embeddings: mesma representação para significados diferentes
+
+
+
+Solução: aprender representações contextuais
+
+Self-Attention
+“é um mecanismo de atenção que relaciona diferentes posições de uma única sequência para computar uma representação da sequência.”
+Ashish Vaswani et al., Google Brain.
+
+Self-Attention
+“The animal didn't cross the street because it was too tired”
+
+Self-Attention
+Decompõe embedding da palavra em 3: Query, Key e Value
+https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Matrizes de peso aprendidas durante o treino
+×
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Matrizes de peso aprendidas durante o treino
+×
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Matrizes de peso aprendidas durante o treino
+×
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Determina a quantidade de atenção que deve ser dada a outras palavras da sentença enquanto codifica a palavra atual (“Thinking”)
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Divide o score pela raiz quadrada da dimensão (64)
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Normaliza os scores para que sejam positivos e somem 1
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Mantém os valores das palavras que provêm atenção à palavra atual e diminui a relevância daquelas que não promovem.
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Self-Attention
+Calculando a autoatenção de “Thinking”
+Soma os vetores
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+Transformers: Multi-Head Attention
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Mecanismo de Atenção
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Transformers: Multi-head Attention
+Provê uma representação mais robusta
+Cada cabeça captura diferentes informações contextuais, correlacionando palavras de uma maneira única
+
+Transformers: Conexões Residuais
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Mecanismo de Atenção
+Skip Connection
+Fonte: httpsarxiv.org/pdf/17://06.03762.pdf
+
+Skip Connection
+Permite que as representações de diferentes níveis de processamento interajam
+As camadas posteriores têm acesso ao entendimento das camadas anteriores
+
+Transformers
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Mecanismo de Atenção
+Skip Connection
+Normalização
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Transformers
+Representação das palavras na camada de entrada
+Codificação de Posicionamento das palavras
+Mecanismo de Atenção
+Skip Connection
+Normalização
+Camada FF
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Codificador (Encoder)
+Encapsula a representação final da sentença de entrada e manda para o decodificador na forma de chave-valor (key e value)
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Decodificador (Decoder)
+Processa a representação codificada.
+
+Determina o quão relacionada cada palavra da saída esperada está em relação às palavras da entrada
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Decodificador (Decoder)
+Processa a representação codificada.
+
+Determina o quão relacionada cada palavra da saída esperada está em relação às palavras da entrada
+Na geração de texto o output é a mesma sentença de entrada deslocada para a direita 
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Decodificador (Decoder)
+Processa a representação codificada.
+
+Determina o quão relacionada cada palavra da saída esperada está em relação às palavras da entrada
+Na geração de texto o output é a mesma sentença de entrada deslocada para a direita 
+Após processamento da saída esperada. A matriz resultante é entregue como consulta 
+
+Transformers
+Fonte: https://arxiv.org/pdf/1706.03762.pdf
+Decodificador (Decoder)
+Processa a representação codificada.
+
+Determina o quão relacionada cada palavra da saída esperada está em relação às palavras da entrada
+Na geração de texto o output é a mesma sentença de entrada deslocada para a direita 
+Após processamento da saída esperada. A matriz resultante é entregue como consulta 
+As probabilidades de saída predizem o próximo token na sentença de saída
+
+Transformers: Encoder
+Fonte: https://huggingface.co/course/chapter1/5
+
+Transformers: Decoder
+fonte: https://huggingface.co/course/chapter1/6
+
+Transformers & Modelos de Linguagem Pré-treinados
+
+Corpus sem anotação
+LLM
+Self-Supervised
+Treino dos Modelos de Linguagem
+Para teinar esses modelos, nos primeiro precisamos de uma GRANDE conjunto de dados textuais. Esse texto ele não precisa ser rotulado. 
+
+Na Aprendizagem de Máquina, o treino desses modelos é chamado de autosupervisionado. 
+
+Pois os dados de treino não precisam de rótulo e o próprio modelo se encarrega de construir esses rótulos em tempo de treino.
+
+Treino dos Modelos de Linguagem
+Corpus sem anotação
+LLM
+Self-Supervised
+Amplo
+Curado
+Porém, esse conjunto de dados que utilizaremos para treino, além de ser amplo, também precisa ser curado, ou seja, ele tem q ser pré processado, mas no sentido de remover conteúdo crítico, que vá introduzir informações falsas ou comportamentos não desejados no modelo treinado.
+
+Treino dos Modelos de Linguagem
+Corpus sem anotação
+LLM
+Self-Supervised
+Amplo
+Curado
+Arquitetura
+Função Objetivo
+Para a realização do treino autosupervisionado nós temos que definir qual será a arquitetura do modelo e qual a sua função objetivo. 
+
+Atualmente existem vários modelos disponíveis e cada um tem alguma especificidade. É preciso conhecermos essas especificidades, para então utilizar a modelagem correta para a nossa tarefa alvo. 
+
+Treino dos Modelos de Linguagem
+Corpus sem anotação
+LLM
+Self-Supervised
+Pesos são atualizados durante o treino 
+O conjunto de pesos aprendidos será utilizado para representar tokens no vocabulário de acordo com o contexto em seu entorno.
+O modelo treinado conseguirá ler e gerar texto
+Amplo
+Curado
+Arquitetura
+Função Objetivo
+Passadas essas etapas anteriores nós podemos então treinar o modelo de linguagem que vá conter pesos, que serão atualizados durante o treino.
+
+Esse conjunto de pesos que são aprendidos podem então ser utilizados para representar palavras de acordo com o contexto ao seu redor.
+
+Por fim, esse modelo treinado ele conseguirá entender e gerar texto condizente com o vocabulário e lingua que você utilizou durante o treino
+
+Pré-treino dos Modelos de Linguagem
+Texto Não-Estruturado
+Atualmente, essa etapa de treino do zero de um modelo de linguagem, é chamada de pré-treino. Pois, como vocês devem ter percebido, são necessário muitos recursos, tanto textual, quanto computacionais para treino desses modelos.
+
+Assim, quem tem a infrestrutura necessária para treinar um modelo desse tipo, normalmente o deixa aberto para ser utilizado por outras pessoas ou entidade.
+
+Esses modelos pré-treinados poderão assim ser utilizados para tarefas-fim ou então adaptados.
+
+Pré-treino dos Modelos de Linguagem
+Texto Não-Estruturado
+Filtro de Qualidade
+Texto Não-Estruturado
+
+Pré-treino dos Modelos de Linguagem
+Texto Não-Estruturado
+Filtro de Qualidade
+Texto Não-Estruturado
+Tokenização
+* Material Complementar: https://huggingface.co/docs/transformers/tokenizer_summary 
+Byte-Pair Encoding
+WordPiece
+Unigram
+Sentence Piece
+Subword *
+quanto mais tokens > maior o custo computacional e mais rica a representação aprendida
+
+quanto menos tokens > menor custo computacional e mais pobre a representação aprendida
+
+
+SUBWORD: tenta balancear esse impasse
+
+Pré-treino dos Modelos de Linguagem
+LLM
+Texto Não-Estruturado
+Filtro de Qualidade
+Texto Não-Estruturado
+Tokenização
+Representação vetorial dos tokens no texto
+* Material Complementar: https://huggingface.co/docs/transformers/tokenizer_summary 
+Byte-Pair Encoding
+WordPiece
+Unigram
+Sentence Piece
+Subword *
+
+Pré-treino dos Modelos de Linguagem
+LLM
+Texto Não-Estruturado
+Filtro de Qualidade
+Texto Não-Estruturado
+Tokenização
+Representação vetorial dos tokens no texto
+Self-Supervision
+- Atualiza os Pesos
+- Minimiza a perda da função objetivo
+- Função objetivo depende da arquitetura
+* Material Complementar: https://huggingface.co/docs/transformers/tokenizer_summary 
+Byte-Pair Encoding
+WordPiece
+Unigram
+Sentence Piece
+Subword *
+
+Pré-treino dos Modelos de Linguagem
+LLM
+Texto Não-Estruturado
+Filtro de Qualidade
+Texto Não-Estruturado
+Tokenização
+Representação vetorial dos tokens no texto
+Self-Supervision
+- Atualiza os Pesos
+- Minimiza a perda da função objetivo
+- Função objetivo depende da arquitetura
+Pesos do modelo
+Estados do Otimizador
+Gradientes
+Ativações
+Variáveis temporárias
+* Material Complementar: https://huggingface.co/docs/transformers/tokenizer_summary 
+Byte-Pair Encoding
+WordPiece
+Unigram
+Sentence Piece
+Subword *
+Como comentei anteriormente, o treino desses modelos depende de um custo. Principalmente o computacional.
+
+Atualmente, o treino desses modelos, depende de GPUs, que são unidades de processamento que conseguem computar funções de forma paralela e otimizada.
+
+Arquiteturas e Funções Objetivo
+Texto Não-Estruturado
+Arquitetura	: Autoencoding
+Objetivo	: Masked Language Modeling
+Arquitetura	: Autoregressive
+Objetivo	: Causal Language Modeling
+Arquitetura	: Seq-to-Seq
+Objetivo	: Span Corruption
+The teacher <MASK> the student
+The teacher ?
+The teacher <X> student
+The teacher teaches the student
+The teacher teaches
+The teacher teaches the student
+Encoder
+Decoder
+Encoder- Decoder
+Self-Supervised
+
+BERT: Bidirectional Encoder Representations from Transformers
+Modelo de linguagem contextual
+Mapeia a representação contextual bidirecional de toda a frase
+Somente encoder
+
+
+Bidirectional Encoder Representations from Transformers
+Dados
+Wikipedia (2.5B palavras) + BookCorpus (800M palavras)
+BERT-Base: 110M
+BERT-Large: 340M
+Treinado em 4 dias
+
+BERT e Transfer Learning 
+Duas etapas:
+Pre-treinamento do modelo
+Fine-tuning: treinar apenas algumas camadas do modelo pré-treinado (ou adicionar novas camadas) de forma a executar tarefas específicas
+
+BERT pre-training: Masked Language Modeling
+Fonte: https://jalammar.github.io/illustrated-bert/
+
+BERT pre-training: Next Sentence Prediction
+
+BERT: Fine-tuning
+Diversas tarefas
+Como extrator de features
+Feature de palavras: posição do token
+Feature de sentenças: token especial [CLS]
+Pode ser usado para classificação e similaridade
+
+Sentence Classification: Sentiment Analysis
+Fonte: https://jalammar.github.io/illustrated-transformer/
+
+ColBERT
+Fonte: https://github.com/stanford-futuredata/ColBERT
+
+Variações
+
+Text-to-Text Transfer Transformer (T5)
+Fonte: https://ai.googleblog.com/2020/02/exploring-transfer-learning-with-t5.html
+Encoder-decoder transformer
+Gera texto como saída para qualquer tarefa
+
+Generative Pretrained Transformer (GPT)
+
+Generative Pretrained Transformer (GPT)
+OpenAI (2018) https://openai.com/blog/language-unsupervised/ 
+Modelagem de Linguagem Não Supervisionada (Pré-treinamento)
+Processa o texto de forma unidirecional
+Transformer decoder com 12 camadas
+768-dimensional hidden states, 3072-dimensional feed-forward
+Byte-pair encoding com 40.000 merges
+117M parâmetros
+Treinado no BooksCorpus: mais de 7.000 livros (sentenças longas)
+Artigo Original: https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf
+
+GPT-2
+Conjunto de dados maior e adição de mais parâmetros ao modelo
+WebText
+40 GB 
+8 milhões de documentos
+Removidos todos os artigos da Wikipedia pois muitos conjuntos de teste contém artigos da Wikipedia
+1,5 bilhão de parâmetros (10x > GPT-1)
+48 camadas
+50.257 tokens
+
+Fonte: https://jalammar.github.io/illustrated-gpt2/
+
+GPT-2
+
+GPT-3
+175 bilhões de parâmetros(100x > GPT-2)
+Corpus:
+45TB
+Common Crawl, WebText2, Books1, Books2 e Wikipedia
+ 96 camadas
+
+GPT-3 
+
+
+
+
+ChatGPT
+Treino incorpora aprendizagem por reforço a partir de feedback humano;
+Fine-tuning do modelo GPT-3 em um amplo conjunto de dados rotulado;
+Foram utilizadas entradas e prompts de usuários da plataforma da OpenAI API;
+Os rotuladores manuais precisaram criar exemplos de categorias de não abrangidas pelos usuários da OpenAI API.
+https://openai.com/blog/chatgpt/
+
+GPT-4 
+
+
+
+Melhoria na qualidade das saídas 
+Menos alucinações
+Imagem e texto
+
+
+
+Modelos Proprietários (GPTs)
+
+
+
+Vantagens:
+Fácil uso
+Funciona bem em tarefas distintas
+Desvantagens:
+Custo
+Tempo de retorno da resposta pode ser alto 
+Moderação e segurança (dados sendo transmitidos para terceiros)
+Customização e flexibilidade
+
+Alternativa a LLMs Proprietários: Open-source
+
+
+
+Menor custo
+Maior controle
+Menor número de parâmetros com performance competitiva
+LLaMA (65B) apresenta melhor performance do que GPT-3 (175B) e PaLM (540B) [1]
+Chinchilla (70B) apresenta melhor performance do que GPT-3 (175B) and Gopher (280B) [2]
+[1] https://arxiv.org/abs/2302.13971
+[2] https://arxiv.org/pdf/2203.15556.pdf 
+Fonte: https://microsoft.github.io/generative-ai-for-beginners/
+
+Quais Modelos de Linguagem temos disponíveis?
+FONTE: https://informationisbeautiful.net/visualizations/the-rise-of-generative-ai-large-language-models-llms-like-chatgpt/
+
+Quais Modelos de Linguagem temos disponíveis?
+FONTE: https://informationisbeautiful.net/visualizations/the-rise-of-generative-ai-large-language-models-llms-like-chatgpt/
+Megatron-Turing NLG 530B de parâmetros
+2240 A100 GPUs 
+FONTE: https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html 
+https://arxiv.org/pdf/2201.11990.pdf 
+
+Quais Modelos de Linguagem temos disponíveis?
+FONTE: https://informationisbeautiful.net/visualizations/the-rise-of-generative-ai-large-language-models-llms-like-chatgpt/
+LLaMA 65B de parâmetros: 
+2048 A100 GPUs
+21 Dias
+FONTE: https://ai.meta.com/blog/large-language-model-llama-meta-ai/ 
+Megatron-Turing NLG 530B de parâmetros
+2240 A100 GPUs 
+FONTE: https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html 
+https://arxiv.org/pdf/2201.11990.pdf 
+
+Desafios no Treino “do zero” de Modelos de Linguagem
+Necessário dados com qualidade (dados curados)
+Requer bastante recurso computacional
+
+GPU
+Nível de Acesso
+$ / hr (AWS)
+VRAM (GB)
+H100
+Empresarial
+12.29
+80
+A100
+Empresarial
+5.12
+80
+V100
+Empresarial
+3.90
+32
+A10G
+Empresarial
+2.03
+24
+T4
+Empresarial
+0.98
+16
+RTX 4080
+Consumidor
+N/A
+16
+FONTE: https://www.youtube.com/watch?v=g68qlo9Izf0 
+Comparação de GPUs
+28 GB @ 32-bit
+full precision
+~100 GB @ 32-bit
+full precision
+Armazenar
+LLM
+7B
+Treinar
+
+Aula Prática
+Google Colab - Modelo BERT
+
+Referências
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/7.pdf>. Capítulo 6. Acesso em: 01 Setembro de 2022.
+Dan Jurafsky, James H. Martin. Speech and Language Processing. (3rd ed. Draft). 2021. Disponível em: <https://web.stanford.edu/~jurafsky/slp3/11.pdf>. Capítulo 11. Acesso em: 01 Setembro de 2022.
+https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html
+Tokenizers: How machines read. Disponível em: <https://blog.floydhub.com/tokenization-nlp/>. Acesso em: 01 Setembro de 2022. 
+Data Science Academy. Deep Learning Book, 2022. Disponível em: <https://www.deeplearningbook.com.br/>. Capítulos: 76 a 82. Acesso em: 01 Setembro. 2022.
+Data Science Academy. Deep Learning Book, 2022. Disponível em: <https://www.deeplearningbook.com.br/>. Capítulos: 86 a 90. Acesso em: 01 Setembro. 2022.
