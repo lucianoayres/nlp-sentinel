@@ -13,6 +13,8 @@ O objetivo do projeto é implementar Análise de Sentimentos em Avaliações de 
 1. **Coleta de Dados:**
 
     - Coletar avaliações dos usuários (texto e nota) para um produto selecionado.
+    - Dataset: [Amazon Reviews Dataset](https://amazon-reviews-2023.github.io/)
+    - Produto Selecionado: A Definir
 
 2. **Treinamento de Classificadores:**
 
