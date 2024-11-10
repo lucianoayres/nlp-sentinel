@@ -1,0 +1,178 @@
+Claro! Vamos implementar a classificação de sentimento utilizando **in-context learning** com **LLMs** conforme o requisito bônus.
+
+### **Compreendendo o In-Context Learning**
+
+O in-context learning permite que modelos de linguagem grandes (LLMs) realizem tarefas específicas fornecendo exemplos diretamente no prompt, sem a necessidade de treinamento adicional. Podemos aproveitar modelos como o GPT-3 para classificar sentimentos fornecendo alguns exemplos anotados (few-shot learning).
+
+### **Abordagem**
+
+1. **Configurar o Ambiente**: Instalar bibliotecas necessárias e configurar a chave da API da OpenAI.
+2. **Preparar os Dados**: Utilizar os dados de teste pré-processados das etapas anteriores.
+3. **Definir o Prompt**: Criar um prompt que inclua exemplos de avaliações com seus respectivos sentimentos.
+4. **Criar uma Função**: Definir uma função para enviar requisições à API da OpenAI e receber as predições.
+5. **Classificar os Dados de Teste**: Utilizar a função para classificar o sentimento das avaliações de teste.
+6. **Avaliar o Modelo**: Comparar as predições com os rótulos verdadeiros e calcular métricas como acurácia e F1-score.
+
+### **Implementação**
+
+#### **1. Configurar o Ambiente**
+
+```python
+# Instalar a biblioteca OpenAI se ainda não estiver instalada
+!pip install openai
+
+import openai
+import os
+import pandas as pd
+import numpy as np
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+```
+
+**Nota:** Certifique-se de ter uma chave de API da OpenAI. Você pode obtê-la no [site da OpenAI](https://platform.openai.com/account/api-keys). **Não compartilhe sua chave de API publicamente.**
+
+```python
+# Defina sua chave de API da OpenAI
+openai.api_key = "SUA_CHAVE_DE_API_AQUI"
+```
+
+#### **2. Preparar os Dados**
+
+Usaremos os dados de teste pré-processados (`X_test` e `y_test`) das etapas anteriores. Certifique-se de que essas variáveis estão disponíveis.
+
+```python
+# Se ainda não carregou, carregue os dados pré-processados
+df = pd.read_csv('avaliacoes_preprocessadas.csv')
+
+# Mapear os rótulos de sentimento para strings, se estiverem em formato numérico
+label_dict = {'negativo': 0, 'neutro': 1, 'positivo': 2}
+label_dict_inv = {v: k for k, v in label_dict.items()}
+
+# Usar a mesma divisão de treino e teste de antes
+from sklearn.model_selection import train_test_split
+
+X = df['review_text']  # Usar o texto original para melhor contexto
+y = df['sentiment']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42
+)
+
+# Resetar os índices
+X_test = X_test.reset_index(drop=True)
+y_test = y_test.reset_index(drop=True)
+```
+
+#### **3. Definir o Prompt**
+
+Precisamos criar um prompt que inclua vários exemplos de avaliações com seus sentimentos correspondentes.
+
+```python
+# Criar exemplos para o prompt
+examples = [
+    {'text': 'O produto é excelente, superou minhas expectativas.', 'sentiment': 'positivo'},
+    {'text': 'Não gostei do material, parece ser frágil.', 'sentiment': 'negativo'},
+    {'text': 'É razoável pelo preço que paguei.', 'sentiment': 'neutro'},
+    {'text': 'Atendimento péssimo, não recomendo.', 'sentiment': 'negativo'},
+    {'text': 'Entrega rápida e produto de alta qualidade!', 'sentiment': 'positivo'},
+    {'text': 'O produto é bom, mas a embalagem chegou danificada.', 'sentiment': 'neutro'},
+]
+```
+
+#### **4. Criar uma Função para Classificar o Texto**
+
+Definiremos uma função que envia uma requisição à API da OpenAI para cada avaliação.
+
+```python
+def classify_sentiment(text, examples):
+    # Construir o prompt
+    prompt = "Classifique o sentimento das seguintes avaliações em 'positivo', 'neutro' ou 'negativo'.\n\n"
+    for ex in examples:
+        prompt += f"Avaliação: {ex['text']}\nSentimento: {ex['sentiment']}\n\n"
+    prompt += f"Avaliação: {text}\nSentimento:"
+
+    # Chamar a API da OpenAI
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Você pode experimentar com "gpt-3.5-turbo" ou outro modelo
+        prompt=prompt,
+        max_tokens=1,
+        temperature=0,
+        top_p=1,
+        n=1,
+        stop=["\n"],
+    )
+
+    sentiment = response.choices[0].text.strip().lower()
+    return sentiment
+```
+
+#### **5. Classificar os Dados de Teste**
+
+Aplicaremos a função aos dados de teste. Note que chamar a API da OpenAI para cada avaliação pode ser demorado e pode incorrer em custos.
+
+```python
+# Limitar o número de amostras para fins de demonstração (por exemplo, primeiras 100 amostras)
+num_samples = 100
+X_test_sample = X_test[:num_samples]
+y_test_sample = y_test[:num_samples]
+
+# Classificar as amostras
+predictions = []
+for review in X_test_sample:
+    sentiment = classify_sentiment(review, examples)
+    predictions.append(sentiment)
+```
+
+#### **6. Avaliar o Modelo**
+
+Mapear os rótulos verdadeiros e predições para valores numéricos para avaliação.
+
+```python
+# Mapear os rótulos verdadeiros para valores numéricos
+y_test_numeric = y_test_sample.map(label_dict).values
+
+# Mapear as predições para valores numéricos
+y_pred_numeric = [label_dict.get(sentiment, -1) for sentiment in predictions]
+
+# Remover quaisquer predições que não puderam ser mapeadas
+valid_indices = [i for i, label in enumerate(y_pred_numeric) if label != -1]
+y_test_valid = y_test_numeric[valid_indices]
+y_pred_valid = [y_pred_numeric[i] for i in valid_indices]
+
+# Calcular as métricas de avaliação
+accuracy = accuracy_score(y_test_valid, y_pred_valid)
+print(f"\nAcurácia no conjunto de teste: {accuracy:.4f}")
+
+print("\nRelatório de Classificação:")
+target_names = ['negativo', 'neutro', 'positivo']
+print(classification_report(y_test_valid, y_pred_valid, target_names=target_names, digits=4))
+
+# Plotar a matriz de confusão
+conf_matrix = confusion_matrix(y_test_valid, y_pred_valid)
+plt.figure(figsize=(8,6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=target_names, yticklabels=target_names)
+plt.title('Matriz de Confusão - In-Context Learning com LLM')
+plt.xlabel('Predito')
+plt.ylabel('Verdadeiro')
+plt.show()
+```
+
+### **Notas**
+
+- **Custos da API**: Esteja ciente de que utilizar a API da OpenAI pode gerar custos. Verifique seu uso da API e configure limites adequados.
+- **Limites de Taxa**: A API possui limites de taxa. Se você estiver processando um grande número de amostras, pode ser necessário implementar atrasos ou processamento em lote.
+- **Seleção de Modelo**: Você pode experimentar diferentes modelos como `gpt-3.5-turbo` ou `text-davinci-003`.
+- **Tratamento de Erros**: Implemente tratamento de erros para gerenciar erros da API ou respostas inesperadas.
+
+### **Conclusão**
+
+Implementamos a classificação de sentimento utilizando in-context learning com um LLM. Esta abordagem aproveita o poder dos modelos de linguagem grandes sem a necessidade de treinamento adicional, fornecendo exemplos diretamente no prompt.
+
+### **Comparação com Outros Modelos**
+
+Agora você pode incluir este modelo em sua comparação junto com os modelos SVM e BERT, avaliando o desempenho e analisando os resultados.
+
+---
+
+Espero que isso o ajude a cumprir o requisito bônus de utilizar in-context learning com LLMs para a classificação. Se precisar de mais assistência ou tiver alguma dúvida, estou à disposição!

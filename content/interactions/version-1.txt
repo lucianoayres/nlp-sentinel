@@ -1,0 +1,535 @@
+# Projeto: Análise de Sentimentos em Avaliações de Produtos
+
+Este projeto tem como objetivo implementar diferentes abordagens de **Análise de Sentimentos** em avaliações de produtos coletadas de um site de e-commerce fictício. As tarefas incluem o pré-processamento dos dados, análise exploratória, treinamento de modelos de classificação utilizando diferentes técnicas, e a comparação dos resultados obtidos.
+
+## Sumário
+
+1. [Especificações do Projeto](#especificacoes)
+2. [Coleta e Pré-processamento de Dados](#pre-processamento)
+3. [Análise Exploratória de Dados](#analise-exploratoria)
+4. [Modelagem e Treinamento](#modelagem)
+   - [SVM + Bag-of-Words](#svm-bow)
+   - [SVM + Embeddings](#svm-embeddings)
+   - [BERT](#bert)
+   - [In-Context Learning com LLMs (Bônus)](#in-context-learning)
+5. [Comparação de Resultados](#comparacao)
+6. [Conclusões](#conclusoes)
+7. [Referências](#referencias)
+
+---
+
+<a name="especificacoes"></a>
+## 1. Especificações do Projeto
+
+- **Coleta de Dados**: Coletar avaliações de usuários para um produto selecionado, incluindo texto e nota.
+- **Treinamento de Classificadores**:
+  1. **SVM + Bag-of-Words (BoW)**
+  2. **SVM + Embeddings**
+  3. **BERT**
+- **Bônus**: Utilizar **in-context learning** com LLMs para a classificação.
+- **Apresentação**: Reportar resultados (F1-score e acurácia) e análises em slides e um vídeo de até 15 minutos.
+
+---
+
+<a name="pre-processamento"></a>
+## 2. Coleta e Pré-processamento de Dados
+
+### 2.1. Coleta de Dados
+
+Para este projeto, utilizamos um conjunto de dados fictício representado por um arquivo CSV chamado `avaliacoes.csv`, contendo as seguintes colunas:
+
+- **`review_text`**: Texto da avaliação do usuário.
+- **`rating`**: Nota dada pelo usuário (escala de 1 a 5).
+
+### 2.2. Objetivos do Pré-processamento
+
+1. **Carregar os dados** do arquivo CSV.
+2. **Limpar e pré-processar o texto** das avaliações:
+   - Remover pontuações, números e caracteres especiais.
+   - Converter o texto para letras minúsculas.
+   - Remover stopwords (palavras comuns que não agregam significado significativo).
+   - Realizar tokenização.
+   - Aplicar lematização para reduzir as palavras às suas formas básicas.
+3. **Converter as notas em rótulos de sentimento**:
+   - Notas 4 e 5: **Positivo**.
+   - Nota 3: **Neutro**.
+   - Notas 1 e 2: **Negativo**.
+
+### 2.3. Código de Pré-processamento
+
+```python
+# Importando as bibliotecas necessárias
+import pandas as pd
+import numpy as np
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import spacy
+
+# Baixar recursos necessários do NLTK e spaCy
+nltk.download('punkt')
+nltk.download('stopwords')
+!python -m spacy download pt_core_news_sm
+
+# Carregar o modelo de língua portuguesa do spaCy
+nlp = spacy.load('pt_core_news_sm')
+
+# 1. Carregar os dados
+df = pd.read_csv('avaliacoes.csv')
+
+# Exibir as primeiras linhas do DataFrame
+print("Dados originais:")
+print(df.head())
+
+# 2. Limpar e pré-processar o texto
+
+# Definir stopwords em português
+stop_words = set(stopwords.words('portuguese'))
+
+def preprocess_text(text):
+    # Remover números
+    text = re.sub(r'\d+', '', text)
+    # Remover pontuação e caracteres especiais
+    text = re.sub(r'[^\w\s]', '', text)
+    # Converter para minúsculas
+    text = text.lower()
+    # Tokenizar o texto
+    doc = nlp(text)
+    # Remover stopwords e aplicar lematização
+    tokens = [token.lemma_ for token in doc if token.text not in stop_words and not token.is_punct]
+    # Retornar o texto pré-processado
+    return ' '.join(tokens)
+
+# Aplicar o pré-processamento ao texto das avaliações
+df['clean_review'] = df['review_text'].apply(preprocess_text)
+
+# 3. Converter as notas em rótulos de sentimento
+
+def get_sentiment_label(rating):
+    if rating >= 4:
+        return 'positivo'
+    elif rating == 3:
+        return 'neutro'
+    else:
+        return 'negativo'
+
+df['sentiment'] = df['rating'].apply(get_sentiment_label)
+
+# Exibir as primeiras linhas do DataFrame após o pré-processamento
+print("\nDados após o pré-processamento:")
+print(df.head())
+
+# Salvar o DataFrame pré-processado em um novo arquivo CSV
+df.to_csv('avaliacoes_preprocessadas.csv', index=False)
+```
+
+### 2.4. Explicação do Código
+
+- **Limpeza do Texto**: Remoção de números, pontuações e conversão para minúsculas para padronização.
+- **Tokenização e Lematização**: Utilizamos o spaCy para tokenizar e lematizar o texto, reduzindo as palavras às suas formas base.
+- **Remoção de Stopwords**: Eliminamos palavras comuns que não contribuem significativamente para o significado.
+- **Conversão de Notas em Sentimentos**: Mapeamos as notas numéricas para categorias de sentimento (positivo, neutro, negativo).
+
+---
+
+<a name="analise-exploratoria"></a>
+## 3. Análise Exploratória de Dados
+
+Realizamos análises descritivas e inferenciais para entender melhor o conjunto de dados.
+
+### 3.1. Distribuição das Notas e Sentimentos
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configurar estilo dos gráficos
+sns.set(style="whitegrid")
+
+# Distribuição das notas
+plt.figure(figsize=(8,6))
+sns.countplot(x='rating', data=df, order=sorted(df['rating'].unique()))
+plt.title('Distribuição das Notas')
+plt.xlabel('Nota')
+plt.ylabel('Contagem')
+plt.show()
+
+# Distribuição dos sentimentos
+plt.figure(figsize=(8,6))
+sns.countplot(x='sentiment', data=df, order=['positivo', 'neutro', 'negativo'])
+plt.title('Distribuição dos Sentimentos')
+plt.xlabel('Sentimento')
+plt.ylabel('Contagem')
+plt.show()
+```
+
+### 3.2. Comprimento das Avaliações por Sentimento
+
+```python
+# Calcular o número de palavras em cada avaliação pré-processada
+df['review_length'] = df['clean_review'].apply(lambda x: len(x.split()))
+
+# Boxplot do comprimento das avaliações por sentimento
+plt.figure(figsize=(8,6))
+sns.boxplot(x='sentiment', y='review_length', data=df, order=['positivo', 'neutro', 'negativo'])
+plt.title('Comprimento das Avaliações por Sentimento')
+plt.xlabel('Sentimento')
+plt.ylabel('Número de Palavras')
+plt.show()
+```
+
+### 3.3. Palavras Mais Frequentes por Sentimento
+
+```python
+from collections import Counter
+
+def get_top_n_words(corpus, n=None):
+    tokens = [word for text in corpus for word in text.split()]
+    return Counter(tokens).most_common(n)
+
+# Palavras mais frequentes em cada sentimento
+for sentiment in ['positivo', 'neutro', 'negativo']:
+    reviews = df[df['sentiment'] == sentiment]['clean_review']
+    top_words = get_top_n_words(reviews, n=10)
+    print(f"\nPalavras mais frequentes em avaliações {sentiment}:")
+    print(top_words)
+```
+
+### 3.4. Análise Inferencial
+
+#### Teste ANOVA
+
+```python
+from scipy.stats import f_oneway
+
+# Separar o comprimento das avaliações por sentimento
+positive_lengths = df[df['sentiment'] == 'positivo']['review_length']
+neutral_lengths = df[df['sentiment'] == 'neutro']['review_length']
+negative_lengths = df[df['sentiment'] == 'negativo']['review_length']
+
+# Realizar o teste ANOVA
+f_statistic, p_value = f_oneway(positive_lengths, neutral_lengths, negative_lengths)
+
+print("\nResultado do teste ANOVA:")
+print(f"Estatística F: {f_statistic:.4f}")
+print(f"Valor-p: {p_value:.4f}")
+```
+
+### 3.5. Conclusões
+
+- **Distribuição Balanceada**: As avaliações estão distribuídas de forma relativamente equilibrada entre os sentimentos.
+- **Comprimento das Avaliações**: Observamos diferenças significativas no comprimento das avaliações entre os sentimentos.
+- **Palavras Frequentes**: As palavras mais frequentes refletem aspectos específicos mencionados pelos usuários em cada categoria de sentimento.
+
+---
+
+<a name="modelagem"></a>
+## 4. Modelagem e Treinamento
+
+Nesta seção, treinamos três modelos de classificação diferentes e uma abordagem bônus:
+
+### 4.1. Preparação dos Dados
+
+Antes de treinar os modelos, dividimos o conjunto de dados em treinamento e teste:
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Separar as features (texto) e o target (sentimento)
+X = df['clean_review']
+y = df['sentiment']
+
+# Dividir em treinamento e teste (80% treinamento, 20% teste)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42
+)
+```
+
+<a name="svm-bow"></a>
+### 4.2. SVM + Bag-of-Words
+
+#### Código de Treinamento
+
+```python
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Converter o texto em representações BoW
+vectorizer = CountVectorizer()
+X_train_bow = vectorizer.fit_transform(X_train)
+X_test_bow = vectorizer.transform(X_test)
+
+# Treinar o classificador SVM
+svm_bow = SVC(kernel='linear', random_state=42)
+svm_bow.fit(X_train_bow, y_train)
+
+# Avaliar o modelo
+y_pred_bow = svm_bow.predict(X_test_bow)
+print("\nSVM + BoW - Relatório de Classificação:")
+print(classification_report(y_test, y_pred_bow, digits=4))
+```
+
+#### Resultados e Interpretação
+
+- **Acurácia e F1-score**: Métricas aceitáveis, mas há espaço para melhorias.
+- **Erros Comuns**: O modelo confunde algumas avaliações neutras com positivas ou negativas.
+
+<a name="svm-embeddings"></a>
+### 4.3. SVM + Embeddings
+
+#### Código de Treinamento
+
+```python
+import gensim
+from gensim.models import KeyedVectors
+import nltk
+
+# Carregar o modelo de embeddings pré-treinado
+embedding_path = 'skip_s50.txt'
+word_vectors = KeyedVectors.load_word2vec_format(embedding_path)
+embedding_dim = word_vectors.vector_size
+
+# Função para obter o vetor de embeddings de um texto
+def get_embedding_vector(text):
+    tokens = nltk.word_tokenize(text)
+    vectors = [word_vectors[token] for token in tokens if token in word_vectors]
+    return np.mean(vectors, axis=0) if vectors else np.zeros(embedding_dim)
+
+# Aplicar a função aos textos
+X_train_embed = np.vstack(X_train.apply(get_embedding_vector))
+X_test_embed = np.vstack(X_test.apply(get_embedding_vector))
+
+# Treinar o classificador SVM
+svm_embed = SVC(kernel='linear', random_state=42)
+svm_embed.fit(X_train_embed, y_train)
+
+# Avaliar o modelo
+y_pred_embed = svm_embed.predict(X_test_embed)
+print("\nSVM + Embeddings - Relatório de Classificação:")
+print(classification_report(y_test, y_pred_embed, digits=4))
+```
+
+#### Resultados e Interpretação
+
+- **Melhoria sobre BoW**: O uso de embeddings capturou melhor a semântica dos textos.
+- **Desafios**: Algumas palavras podem não estar no vocabulário dos embeddings.
+
+<a name="bert"></a>
+### 4.4. BERT
+
+#### Código de Treinamento
+
+```python
+import torch
+from torch.utils.data import Dataset, DataLoader
+from transformers import BertTokenizerFast, BertForSequenceClassification, AdamW
+from sklearn.preprocessing import LabelEncoder
+
+# Preparar os dados
+tokenizer = BertTokenizerFast.from_pretrained('neuralmind/bert-base-portuguese-cased')
+label_encoder = LabelEncoder()
+y_train_enc = label_encoder.fit_transform(y_train)
+y_test_enc = label_encoder.transform(y_test)
+
+# Tokenizar os dados
+train_encodings = tokenizer(list(X_train), truncation=True, padding=True, max_length=128)
+test_encodings = tokenizer(list(X_test), truncation=True, padding=True, max_length=128)
+
+# Criar datasets
+class SentimentDataset(Dataset):
+    def __init__(self, encodings, labels):
+        self.encodings = encodings
+        self.labels = labels
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        item['labels'] = torch.tensor(self.labels[idx])
+        return item
+    def __len__(self):
+        return len(self.labels)
+
+train_dataset = SentimentDataset(train_encodings, y_train_enc)
+test_dataset = SentimentDataset(test_encodings, y_test_enc)
+
+# Carregar o modelo BERT
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = BertForSequenceClassification.from_pretrained(
+    'neuralmind/bert-base-portuguese-cased',
+    num_labels=3
+)
+model.to(device)
+
+# Treinar o modelo
+optimizer = AdamW(model.parameters(), lr=2e-5)
+train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+model.train()
+
+for epoch in range(3):
+    for batch in train_loader:
+        optimizer.zero_grad()
+        input_ids = batch['input_ids'].to(device)
+        attention_mask = batch['attention_mask'].to(device)
+        labels = batch['labels'].to(device)
+        outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
+        loss = outputs.loss
+        loss.backward()
+        optimizer.step()
+
+# Avaliar o modelo
+model.eval()
+test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
+predictions = []
+true_labels = []
+
+with torch.no_grad():
+    for batch in test_loader:
+        input_ids = batch['input_ids'].to(device)
+        attention_mask = batch['attention_mask'].to(device)
+        labels = batch['labels'].to(device)
+        outputs = model(input_ids, attention_mask=attention_mask)
+        logits = outputs.logits
+        preds = torch.argmax(logits, dim=1)
+        predictions.extend(preds.cpu().numpy())
+        true_labels.extend(labels.cpu().numpy())
+
+print("\nBERT - Relatório de Classificação:")
+print(classification_report(true_labels, predictions, target_names=label_encoder.classes_, digits=4))
+```
+
+#### Resultados e Interpretação
+
+- **Melhor Desempenho**: O BERT superou os modelos anteriores em todas as métricas.
+- **Capacidade Contextual**: Captura contextos complexos e nuances linguísticas.
+
+<a name="in-context-learning"></a>
+### 4.5. In-Context Learning com LLMs (Bônus)
+
+#### Código de Implementação
+
+```python
+import openai
+
+# Configurar a chave da API da OpenAI
+openai.api_key = "SUA_CHAVE_DE_API_AQUI"
+
+# Exemplo de prompt com in-context learning
+examples = [
+    {'text': 'O produto é excelente, superou minhas expectativas.', 'sentiment': 'positivo'},
+    {'text': 'Não gostei do material, parece ser frágil.', 'sentiment': 'negativo'},
+    {'text': 'É razoável pelo preço que paguei.', 'sentiment': 'neutro'},
+    # Adicione mais exemplos se necessário
+]
+
+def classify_sentiment(text, examples):
+    prompt = "Classifique o sentimento das seguintes avaliações em 'positivo', 'neutro' ou 'negativo'.\n\n"
+    for ex in examples:
+        prompt += f"Avaliação: {ex['text']}\nSentimento: {ex['sentiment']}\n\n"
+    prompt += f"Avaliação: {text}\nSentimento:"
+
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=1,
+        temperature=0,
+        top_p=1,
+        n=1,
+        stop=["\n"],
+    )
+
+    sentiment = response.choices[0].text.strip().lower()
+    return sentiment
+
+# Classificar um subconjunto dos dados de teste
+num_samples = 100
+X_test_sample = X_test.reset_index(drop=True)[:num_samples]
+y_test_sample = y_test.reset_index(drop=True)[:num_samples]
+
+predictions = []
+for review in X_test_sample:
+    sentiment = classify_sentiment(review, examples)
+    predictions.append(sentiment)
+
+# Avaliar o modelo
+from sklearn.metrics import accuracy_score
+
+# Mapear os rótulos
+label_dict = {'negativo': 0, 'neutro': 1, 'positivo': 2}
+y_test_numeric = y_test_sample.map(label_dict).values
+y_pred_numeric = [label_dict.get(sentiment, -1) for sentiment in predictions]
+
+# Remover predições inválidas
+valid_indices = [i for i, label in enumerate(y_pred_numeric) if label != -1]
+y_test_valid = y_test_numeric[valid_indices]
+y_pred_valid = [y_pred_numeric[i] for i in valid_indices]
+
+accuracy = accuracy_score(y_test_valid, y_pred_valid)
+print(f"\nIn-Context Learning - Acurácia: {accuracy:.4f}")
+```
+
+#### Resultados e Interpretação
+
+- **Desempenho Competitivo**: O LLM alcançou resultados satisfatórios sem treinamento adicional.
+- **Custos e Limitações**: Dependência de APIs externas e possíveis custos associados.
+
+---
+
+<a name="comparacao"></a>
+## 5. Comparação de Resultados
+
+### 5.1. Tabela de Métricas
+
+| Modelo             | Acurácia | Precisão | Recall  | F1-Score |
+|--------------------|----------|----------|---------|----------|
+| SVM + BoW          | 0.75     | 0.74     | 0.75    | 0.74     |
+| SVM + Embeddings   | 0.78     | 0.77     | 0.78    | 0.77     |
+| BERT               | 0.85     | 0.85     | 0.85    | 0.85     |
+| In-Context Learning| 0.80     | 0.79     | 0.80    | 0.79     |
+
+### 5.2. Matrizes de Confusão
+
+#### SVM + BoW
+
+![Matriz de Confusão - SVM + BoW](images/confusion_matrix_bow.png)
+
+#### SVM + Embeddings
+
+![Matriz de Confusão - SVM + Embeddings](images/confusion_matrix_embed.png)
+
+#### BERT
+
+![Matriz de Confusão - BERT](images/confusion_matrix_bert.png)
+
+#### In-Context Learning
+
+![Matriz de Confusão - In-Context Learning](images/confusion_matrix_llm.png)
+
+### 5.3. Análise Comparativa
+
+- **Melhor Desempenho Geral**: O modelo BERT obteve as melhores métricas, demonstrando sua capacidade em tarefas de linguagem natural.
+- **SVM + Embeddings vs. SVM + BoW**: A utilização de embeddings melhorou o desempenho em relação ao BoW.
+- **In-Context Learning**: Apresentou resultados competitivos, mas com limitações em escalabilidade e custos.
+
+---
+
+<a name="conclusoes"></a>
+## 6. Conclusões
+
+- **Eficácia do BERT**: Confirmamos que modelos baseados em transformadores, como o BERT, são altamente eficazes para análise de sentimentos.
+- **Importância do Pré-processamento**: Um pré-processamento adequado é fundamental para o desempenho dos modelos.
+- **Abordagens Tradicionais vs. Avançadas**: Enquanto modelos tradicionais como SVM são úteis, técnicas modernas oferecem melhorias significativas.
+- **In-Context Learning como Alternativa**: Útil em cenários com poucos dados ou recursos computacionais limitados para treinamento.
+
+---
+
+<a name="referencias"></a>
+## 7. Referências
+
+- **NILC Embeddings**: http://nilc.icmc.usp.br/embeddings
+- **BERTimbau**: https://github.com/neuralmind-ai/portuguese-bert
+- **spaCy Language Models**: https://spacy.io/models/pt
+- **OpenAI GPT-3 Documentation**: https://platform.openai.com/docs/introduction
+
+---
+
+**Observação**: Os resultados apresentados são ilustrativos e baseados em dados fictícios. Em um cenário real, é essencial utilizar conjuntos de dados representativos e considerar aspectos éticos e legais relacionados ao uso de dados e modelos de linguagem.

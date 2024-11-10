@@ -1,0 +1,281 @@
+Certamente! Vamos realizar a tarefa de treinar um modelo **BERT** para classificação de sentimento em seu conjunto de dados pré-processado.
+
+### **Objetivo**
+
+Utilizar um modelo BERT pré-treinado e ajustá-lo (fine-tuning) para a tarefa de classificação de sentimento em português.
+
+### **Passos a Seguir**
+
+1. **Carregar os dados pré-processados** do arquivo CSV.
+2. **Preparar os dados para o BERT**:
+   - Tokenizar o texto usando o tokenizador BERT.
+   - Converter os rótulos para formato numérico.
+   - Criar um Dataset e DataLoader do PyTorch.
+3. **Configurar o modelo BERT para classificação**.
+4. **Treinar o modelo**.
+5. **Avaliar o modelo** no conjunto de teste.
+6. **Exibir os resultados**.
+
+### **Instalação das Bibliotecas Necessárias**
+
+Certifique-se de ter as seguintes bibliotecas instaladas:
+
+```bash
+pip install transformers datasets torch scikit-learn
+```
+
+### **Código Completo**
+
+```python
+# Importar bibliotecas necessárias
+import pandas as pd
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+from transformers import BertTokenizerFast, BertForSequenceClassification, AdamW, get_linear_schedule_with_warmup
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Verificar se CUDA está disponível
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Usando dispositivo: {device}')
+
+# 1. Carregar os dados pré-processados
+df = pd.read_csv('avaliacoes_preprocessadas.csv')
+
+# Exibir as primeiras linhas do DataFrame
+print("Dados pré-processados:")
+print(df.head())
+
+# Remover linhas com valores nulos (se houver)
+df.dropna(inplace=True)
+
+# 2. Preparar os dados para o BERT
+
+# Definir o tokenizador
+tokenizer = BertTokenizerFast.from_pretrained('neuralmind/bert-base-portuguese-cased')
+
+# Mapear os rótulos de sentimento para valores numéricos
+label_dict = {'negativo': 0, 'neutro': 1, 'positivo': 2}
+df['label'] = df['sentiment'].map(label_dict)
+
+# Dividir os dados em conjuntos de treinamento e teste
+X_train, X_test, y_train, y_test = train_test_split(
+    df['review_text'],  # Usar o texto original para melhor tokenização
+    df['label'],
+    test_size=0.2,
+    stratify=df['label'],
+    random_state=42
+)
+
+# Resetar os índices
+X_train = X_train.reset_index(drop=True)
+X_test = X_test.reset_index(drop=True)
+y_train = y_train.reset_index(drop=True)
+y_test = y_test.reset_index(drop=True)
+
+# Tokenizar os dados
+max_length = 128  # Ajuste conforme necessário
+
+train_encodings = tokenizer(list(X_train), truncation=True, padding=True, max_length=max_length)
+test_encodings = tokenizer(list(X_test), truncation=True, padding=True, max_length=max_length)
+
+# Criar uma classe Dataset personalizada
+class SentimentDataset(Dataset):
+    def __init__(self, encodings, labels):
+        self.encodings = encodings
+        self.labels = labels.reset_index(drop=True)
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        item['labels'] = torch.tensor(self.labels[idx])
+        return item
+
+# Criar os datasets
+train_dataset = SentimentDataset(train_encodings, y_train)
+test_dataset = SentimentDataset(test_encodings, y_test)
+
+# Criar os DataLoaders
+batch_size = 16
+
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+# 3. Configurar o modelo BERT para classificação
+
+model = BertForSequenceClassification.from_pretrained(
+    'neuralmind/bert-base-portuguese-cased',
+    num_labels=3  # Três rótulos: negativo, neutro, positivo
+)
+
+model.to(device)
+
+# 4. Treinar o modelo
+
+# Configurar o otimizador e scheduler
+optimizer = AdamW(model.parameters(), lr=2e-5)
+
+epochs = 3
+total_steps = len(train_loader) * epochs
+
+scheduler = get_linear_schedule_with_warmup(
+    optimizer,
+    num_warmup_steps=0,
+    num_training_steps=total_steps
+)
+
+# Definir a função de perda
+loss_fn = nn.CrossEntropyLoss()
+
+# Loop de treinamento
+for epoch in range(epochs):
+    print(f'Época {epoch + 1}/{epochs}')
+    model.train()
+    total_train_loss = 0
+
+    for batch in train_loader:
+        optimizer.zero_grad()
+        input_ids = batch['input_ids'].to(device)
+        attention_mask = batch['attention_mask'].to(device)
+        labels = batch['labels'].to(device)
+
+        outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
+        loss = outputs.loss
+
+        total_train_loss += loss.item()
+
+        loss.backward()
+        optimizer.step()
+        scheduler.step()
+
+    avg_train_loss = total_train_loss / len(train_loader)
+    print(f'Perda média de treinamento: {avg_train_loss:.4f}')
+
+    # Validação
+    model.eval()
+    total_eval_loss = 0
+    predictions, true_labels = [], []
+
+    with torch.no_grad():
+        for batch in test_loader:
+            input_ids = batch['input_ids'].to(device)
+            attention_mask = batch['attention_mask'].to(device)
+            labels = batch['labels'].to(device)
+
+            outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
+            loss = outputs.loss
+            total_eval_loss += loss.item()
+
+            logits = outputs.logits
+            preds = torch.argmax(logits, dim=1)
+            predictions.extend(preds.cpu().numpy())
+            true_labels.extend(labels.cpu().numpy())
+
+    avg_val_loss = total_eval_loss / len(test_loader)
+    print(f'Perda média de validação: {avg_val_loss:.4f}')
+
+    # Calcular acurácia
+    accuracy = np.sum(np.array(predictions) == np.array(true_labels)) / len(true_labels)
+    print(f'Acurácia na validação: {accuracy:.4f}')
+
+# 5. Avaliar o modelo no conjunto de teste
+
+print("\nRelatório de Classificação:")
+target_names = ['negativo', 'neutro', 'positivo']
+print(classification_report(true_labels, predictions, target_names=target_names, digits=4))
+
+# Matriz de Confusão
+conf_matrix = confusion_matrix(true_labels, predictions)
+
+# Plotar a matriz de confusão
+plt.figure(figsize=(8,6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=target_names, yticklabels=target_names)
+plt.title('Matriz de Confusão')
+plt.xlabel('Predito')
+plt.ylabel('Verdadeiro')
+plt.show()
+```
+
+### **Explicação do Código**
+
+#### **Importação das Bibliotecas**
+
+Importamos as bibliotecas necessárias, incluindo `torch`, `transformers` e módulos do `sklearn` para construção, treinamento e avaliação do modelo.
+
+#### **Carregando os Dados Pré-processados**
+
+Carregamos os dados do arquivo `avaliacoes_preprocessadas.csv` e garantimos que não haja valores nulos.
+
+#### **Preparando os Dados para o BERT**
+
+- **Tokenizador**: Utilizamos o `BertTokenizerFast` para tokenizar os dados de texto. Como os dados estão em português, usamos o modelo pré-treinado `neuralmind/bert-base-portuguese-cased`.
+
+- **Mapeamento de Rótulos**: Convertendo os rótulos de sentimento para valores numéricos:
+
+  ```python
+  label_dict = {'negativo': 0, 'neutro': 1, 'positivo': 2}
+  ```
+
+- **Divisão dos Dados**: Dividimos os dados em conjuntos de treinamento e teste, garantindo a estratificação para manter o equilíbrio das classes.
+
+- **Tokenização**: Tokenizamos os textos utilizando o tokenizador, com truncamento e padding para um comprimento máximo (por exemplo, 128 tokens).
+
+- **Dataset e DataLoader**: Criamos uma classe personalizada `SentimentDataset` e usamos `DataLoader` para facilitar o batching e shuffling durante o treinamento.
+
+#### **Configurando o Modelo BERT**
+
+Carregamos o modelo BERT pré-treinado para classificação de sequência, especificando o número de rótulos como 3. Movemos o modelo para o dispositivo apropriado (GPU se disponível).
+
+#### **Treinando o Modelo**
+
+- **Otimizador e Scheduler**: Utilizamos o otimizador `AdamW` e um scheduler de taxa de aprendizado linear com warm-up.
+
+- **Função de Perda**: Usamos `CrossEntropyLoss` como a função de perda.
+
+- **Loop de Treinamento**: Para cada época, treinamos o modelo, calculamos a perda de treinamento e realizamos a validação para calcular a perda e a acurácia de validação.
+
+#### **Avaliando o Modelo**
+
+Após o treinamento, exibimos o relatório de classificação e plotamos a matriz de confusão para avaliar o desempenho do modelo no conjunto de teste.
+
+### **Notas Importantes**
+
+- **Modelo Pré-treinado**: Utilizamos o modelo `neuralmind/bert-base-portuguese-cased`, que é um BERT pré-treinado em um grande corpus de dados em português.
+
+- **Uso de GPU**: O treinamento de modelos BERT pode ser intensivo computacionalmente. Recomenda-se o uso de GPU para acelerar o processo. Verifique se você tem acesso a uma GPU compatível e se o PyTorch está instalado com suporte a CUDA.
+
+- **Ajuste de Hiperparâmetros**: Você pode experimentar diferentes valores para `batch_size`, `epochs`, `learning_rate` e `max_length` para ver como eles afetam o desempenho do modelo.
+
+- **Tratamento de Desbalanceamento de Classes**: Se o seu conjunto de dados for desbalanceado, considere técnicas como ponderação da perda ou oversampling das classes minoritárias.
+
+### **Próximos Passos**
+
+- **Salvar e Carregar o Modelo**: Você pode salvar o modelo treinado para uso futuro:
+
+  ```python
+  # Salvar o modelo
+  model.save_pretrained('modelo_bert_sentimento')
+  tokenizer.save_pretrained('modelo_bert_sentimento')
+
+  # Carregar o modelo
+  model = BertForSequenceClassification.from_pretrained('modelo_bert_sentimento')
+  tokenizer = BertTokenizerFast.from_pretrained('modelo_bert_sentimento')
+  ```
+
+- **Testar em Novos Dados**: Use o modelo treinado para prever sentimentos em novos dados não vistos.
+
+- **Comparar com Outros Modelos**: Compare o desempenho do modelo BERT com os modelos anteriores (SVM + BoW, SVM + Embeddings) em termos de acurácia, F1-score e outras métricas relevantes.
+
+- **Ajuste Fino**: Experimente técnicas de fine-tuning mais avançadas, como congelar certas camadas ou ajustar a taxa de aprendizado de forma diferenciada para diferentes partes do modelo.
+
+### **Conclusão**
+
+O treinamento de um modelo BERT para classificação de sentimento pode melhorar significativamente o desempenho devido à capacidade do BERT de capturar padrões linguísticos complexos. Certifique-se de pré-processar seus dados adequadamente e ajustar o modelo conforme necessário para obter os melhores resultados.
+
+Se tiver alguma dúvida ou precisar de assistência adicional em qualquer etapa, estou à disposição para ajudar!

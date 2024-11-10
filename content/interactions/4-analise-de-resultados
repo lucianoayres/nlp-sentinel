@@ -1,0 +1,179 @@
+Claro! Vamos gerar o código para comparar a performance e os resultados entre os três classificadores que você treinou:
+
+1. **SVM + Bag-of-Words (BoW)**
+2. **SVM + Embeddings**
+3. **BERT**
+
+O objetivo é avaliar e comparar as métricas de desempenho de cada modelo, incluindo acurácia, precisão, recall e F1-score, além de visualizar as matrizes de confusão.
+
+### **Passos a Seguir**
+
+1. **Consolidar as Predições e Rótulos Verdadeiros**: Garantir que temos as predições (`y_pred`) e os rótulos verdadeiros (`y_test`) de cada modelo.
+
+2. **Calcular as Métricas de Desempenho**: Para cada modelo, calcular acurácia, precisão, recall e F1-score.
+
+3. **Organizar os Resultados**: Criar uma tabela (DataFrame) que resume as métricas de cada modelo.
+
+4. **Visualizar as Matrizes de Confusão**: Plotar as matrizes de confusão lado a lado para comparar o desempenho em cada classe.
+
+### **Código Completo**
+
+```python
+# Importar bibliotecas necessárias
+import pandas as pd
+import numpy as np
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Definir nomes dos modelos
+model_names = ['SVM + BoW', 'SVM + Embeddings', 'BERT']
+
+# Assegurar que temos as predições e rótulos verdadeiros de cada modelo
+# Supondo que você tenha as seguintes variáveis a partir dos códigos anteriores:
+# Para SVM + BoW:
+# - y_test_bow: rótulos verdadeiros
+# - y_pred_bow: predições do modelo
+
+# Para SVM + Embeddings:
+# - y_test_embed: rótulos verdadeiros
+# - y_pred_embed: predições do modelo
+
+# Para BERT:
+# - true_labels_bert: rótulos verdadeiros
+# - predictions_bert: predições do modelo
+
+# Se essas variáveis não estão definidas, você precisa executar os códigos de treinamento novamente ou salvar os resultados.
+
+# Para fins deste exemplo, vamos supor que as variáveis estão disponíveis.
+
+# 1. Consolidar as predições e rótulos verdadeiros
+
+# Converter rótulos para valores numéricos (se necessário)
+label_dict = {'negativo': 0, 'neutro': 1, 'positivo': 2}
+
+# SVM + BoW
+# Se y_test e y_pred estão em formato de string, converter para numérico
+y_test_bow_numeric = y_test.map(label_dict) if y_test.dtype == 'object' else y_test
+y_pred_bow_numeric = pd.Series(y_pred).map(label_dict) if isinstance(y_pred[0], str) else y_pred
+
+# SVM + Embeddings
+y_test_embed_numeric = y_test.map(label_dict) if y_test.dtype == 'object' else y_test
+y_pred_embed_numeric = pd.Series(y_pred_embed).map(label_dict) if isinstance(y_pred_embed[0], str) else y_pred_embed
+
+# BERT
+# As predições e rótulos já estão em formato numérico
+y_test_bert = true_labels  # já numérico
+y_pred_bert = predictions  # já numérico
+
+# 2. Calcular as métricas de desempenho
+
+# Criar um DataFrame para armazenar as métricas
+metrics_df = pd.DataFrame(columns=['Model', 'Accuracy', 'Precision', 'Recall', 'F1-Score'])
+
+# Função para calcular as métricas
+def calculate_metrics(y_true, y_pred, model_name):
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred, average='weighted', zero_division=0)
+    recall = recall_score(y_true, y_pred, average='weighted', zero_division=0)
+    f1 = f1_score(y_true, y_pred, average='weighted', zero_division=0)
+    metrics_df.loc[len(metrics_df)] = [model_name, accuracy, precision, recall, f1]
+
+# Calcular métricas para cada modelo
+calculate_metrics(y_test_bow_numeric, y_pred_bow_numeric, 'SVM + BoW')
+calculate_metrics(y_test_embed_numeric, y_pred_embed_numeric, 'SVM + Embeddings')
+calculate_metrics(y_test_bert, y_pred_bert, 'BERT')
+
+# Exibir o DataFrame com as métricas
+print("Comparação das Métricas de Desempenho:")
+print(metrics_df)
+
+# 3. Visualizar as Matrizes de Confusão
+
+# Definir os rótulos das classes
+target_names = ['negativo', 'neutro', 'positivo']
+
+# Criar subplots
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+# SVM + BoW
+conf_matrix_bow = confusion_matrix(y_test_bow_numeric, y_pred_bow_numeric)
+sns.heatmap(conf_matrix_bow, annot=True, fmt='d', cmap='Blues', xticklabels=target_names, yticklabels=target_names, ax=axes[0])
+axes[0].set_title('Matriz de Confusão - SVM + BoW')
+axes[0].set_xlabel('Predito')
+axes[0].set_ylabel('Verdadeiro')
+
+# SVM + Embeddings
+conf_matrix_embed = confusion_matrix(y_test_embed_numeric, y_pred_embed_numeric)
+sns.heatmap(conf_matrix_embed, annot=True, fmt='d', cmap='Greens', xticklabels=target_names, yticklabels=target_names, ax=axes[1])
+axes[1].set_title('Matriz de Confusão - SVM + Embeddings')
+axes[1].set_xlabel('Predito')
+axes[1].set_ylabel('Verdadeiro')
+
+# BERT
+conf_matrix_bert = confusion_matrix(y_test_bert, y_pred_bert)
+sns.heatmap(conf_matrix_bert, annot=True, fmt='d', cmap='Oranges', xticklabels=target_names, yticklabels=target_names, ax=axes[2])
+axes[2].set_title('Matriz de Confusão - BERT')
+axes[2].set_xlabel('Predito')
+axes[2].set_ylabel('Verdadeiro')
+
+plt.tight_layout()
+plt.show()
+```
+
+### **Explicação do Código**
+
+#### **1. Consolidar as Predições e Rótulos Verdadeiros**
+
+- **Conversão de Rótulos**: Garantimos que os rótulos e predições estão no mesmo formato (numérico) para todos os modelos.
+- **Mapeamento de Rótulos**: Usamos `label_dict` para converter rótulos de string para valores numéricos, se necessário.
+
+#### **2. Calcular as Métricas de Desempenho**
+
+- **Função `calculate_metrics`**: Calcula acurácia, precisão, recall e F1-score para um conjunto de predições e rótulos verdadeiros.
+- **Criação do DataFrame `metrics_df`**: Armazena as métricas de cada modelo para fácil comparação.
+- **Métricas Ponderadas**: Usamos `average='weighted'` para levar em conta o desbalanceamento de classes.
+
+#### **3. Visualizar as Matrizes de Confusão**
+
+- **Subplots**: Criamos um gráfico com três subplots lado a lado, um para cada modelo.
+- **Matrizes de Confusão**: Usamos `confusion_matrix` e `seaborn.heatmap` para visualizar a performance em cada classe.
+- **Personalização**: Definimos títulos, rótulos dos eixos e cores diferentes para cada matriz para melhor visualização.
+
+### **Resultados Esperados**
+
+- **Tabela de Métricas**: Uma tabela mostrando acurácia, precisão, recall e F1-score de cada modelo.
+- **Matrizes de Confusão**: Gráficos que permitem comparar visualmente o desempenho dos modelos em cada classe.
+
+### **Interpretação dos Resultados**
+
+- **Acurácia**: Proporção de predições corretas sobre o total de exemplos.
+- **Precisão**: Proporção de predições positivas corretas em relação ao total de predições positivas feitas.
+- **Recall**: Proporção de verdadeiros positivos que foram corretamente identificados.
+- **F1-Score**: Média harmônica entre precisão e recall, útil quando há desbalanceamento de classes.
+- **Matrizes de Confusão**: Mostram o número de acertos e erros para cada classe, permitindo identificar padrões de erros.
+
+### **Análise Comparativa**
+
+- **Desempenho Geral**: Qual modelo teve a melhor acurácia e F1-score?
+- **Desempenho por Classe**: Algum modelo tem dificuldade em classificar uma determinada classe?
+- **Equilíbrio de Métricas**: O modelo com maior acurácia também possui alta precisão e recall?
+
+### **Possíveis Melhorias**
+
+- **Análise de Erros**: Examinar exemplos onde os modelos erraram para entender possíveis causas.
+- **Ajuste de Hiperparâmetros**: Realizar otimização de hiperparâmetros para melhorar o desempenho dos modelos.
+- **Conjunto de Validação**: Usar um conjunto de validação separado para evitar overfitting durante o ajuste de hiperparâmetros.
+- **Ensemble de Modelos**: Combinar as predições dos modelos para potencialmente melhorar o desempenho.
+
+### **Conclusão**
+
+A comparação entre os modelos permite identificar qual abordagem é mais eficaz para a tarefa de classificação de sentimento em seu conjunto de dados. O modelo BERT, por exemplo, pode apresentar melhor desempenho devido à sua capacidade de capturar contextos complexos na linguagem natural.
+
+### **Notas Finais**
+
+- **Reprodutibilidade**: Certifique-se de que todas as variáveis necessárias (predições e rótulos) estão disponíveis antes de executar o código.
+- **Visualização**: Ajuste os tamanhos e estilos dos gráficos conforme necessário para melhor apresentação.
+- **Documentação**: Inclua esses resultados em sua apresentação, destacando insights importantes e possíveis razões para as diferenças observadas entre os modelos.
+
+Se precisar de assistência adicional ou tiver dúvidas sobre qualquer parte do código ou interpretação dos resultados, estou aqui para ajudar!

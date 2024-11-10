@@ -1,0 +1,234 @@
+Claro! Vamos realizar análises descritivas e inferenciais dos dados pré-processados. As análises nos ajudarão a entender melhor a distribuição dos sentimentos, das notas e outras características importantes das avaliações.
+
+### **Análises Descritivas**
+
+#### 1. **Distribuição das Notas**
+
+Vamos analisar como as notas (ratings) estão distribuídas no conjunto de dados.
+
+```python
+# Importar bibliotecas adicionais para visualização
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configurar estilo dos gráficos
+sns.set(style="whitegrid")
+
+# Contagem de avaliações por nota
+rating_counts = df['rating'].value_counts().sort_index()
+
+print("Contagem de avaliações por nota:")
+print(rating_counts)
+
+# Plotar histograma das notas
+plt.figure(figsize=(8,6))
+sns.countplot(x='rating', data=df, order=sorted(df['rating'].unique()))
+plt.title('Distribuição das Notas')
+plt.xlabel('Nota')
+plt.ylabel('Contagem')
+plt.show()
+```
+
+**Explicação:**
+
+- **Contagem de avaliações por nota**: Calculamos quantas avaliações existem para cada nota.
+- **Visualização**: Usamos um gráfico de barras para visualizar a distribuição das notas.
+
+#### 2. **Distribuição dos Sentimentos**
+
+Agora, vamos verificar como os sentimentos estão distribuídos.
+
+```python
+# Contagem de avaliações por sentimento
+sentiment_counts = df['sentiment'].value_counts()
+
+print("\nContagem de avaliações por sentimento:")
+print(sentiment_counts)
+
+# Plotar gráfico de barras dos sentimentos
+plt.figure(figsize=(8,6))
+sns.countplot(x='sentiment', data=df, order=['positivo', 'neutro', 'negativo'])
+plt.title('Distribuição dos Sentimentos')
+plt.xlabel('Sentimento')
+plt.ylabel('Contagem')
+plt.show()
+```
+
+**Explicação:**
+
+- **Contagem de avaliações por sentimento**: Vemos quantas avaliações estão classificadas como positivas, neutras ou negativas.
+- **Visualização**: O gráfico de barras nos ajuda a comparar visualmente as frequências de cada sentimento.
+
+#### 3. **Análise do Comprimento das Avaliações**
+
+Vamos calcular o comprimento (número de palavras) de cada avaliação e analisar a distribuição por sentimento.
+
+```python
+# Calcular o número de palavras em cada avaliação pré-processada
+df['review_length'] = df['clean_review'].apply(lambda x: len(x.split()))
+
+# Exibir estatísticas descritivas do comprimento das avaliações
+print("\nEstatísticas descritivas do comprimento das avaliações:")
+print(df['review_length'].describe())
+
+# Boxplot do comprimento das avaliações por sentimento
+plt.figure(figsize=(8,6))
+sns.boxplot(x='sentiment', y='review_length', data=df, order=['positivo', 'neutro', 'negativo'])
+plt.title('Comprimento das Avaliações por Sentimento')
+plt.xlabel('Sentimento')
+plt.ylabel('Número de Palavras')
+plt.show()
+```
+
+**Explicação:**
+
+- **Cálculo do comprimento**: Contamos o número de palavras em cada avaliação.
+- **Estatísticas descritivas**: Obtemos medidas como média, mediana, mínimo e máximo.
+- **Visualização**: O boxplot mostra a distribuição do comprimento das avaliações para cada sentimento.
+
+#### 4. **Palavras Mais Frequentes por Sentimento**
+
+Vamos identificar as palavras mais frequentes em cada classe de sentimento.
+
+```python
+from collections import Counter
+
+def get_top_n_words(corpus, n=None):
+    tokens = [word for text in corpus for word in text.split()]
+    return Counter(tokens).most_common(n)
+
+# Palavras mais frequentes em avaliações positivas
+positive_reviews = df[df['sentiment'] == 'positivo']['clean_review']
+top_positive = get_top_n_words(positive_reviews, n=10)
+print("\nPalavras mais frequentes em avaliações positivas:")
+print(top_positive)
+
+# Palavras mais frequentes em avaliações negativas
+negative_reviews = df[df['sentiment'] == 'negativo']['clean_review']
+top_negative = get_top_n_words(negative_reviews, n=10)
+print("\nPalavras mais frequentes em avaliações negativas:")
+print(top_negative)
+
+# Palavras mais frequentes em avaliações neutras
+neutral_reviews = df[df['sentiment'] == 'neutro']['clean_review']
+top_neutral = get_top_n_words(neutral_reviews, n=10)
+print("\nPalavras mais frequentes em avaliações neutras:")
+print(top_neutral)
+```
+
+**Explicação:**
+
+- **Contagem de palavras**: Contamos a frequência de cada palavra nas avaliações de cada sentimento.
+- **Interpretação**: As palavras mais frequentes podem indicar temas ou aspectos recorrentes em cada sentimento.
+
+#### 5. **Exemplos de Avaliações por Sentimento**
+
+Visualizar exemplos reais de avaliações ajuda a compreender melhor o conteúdo.
+
+```python
+# Exemplo de avaliação positiva
+print("\nExemplo de avaliação positiva:")
+print(df[df['sentiment'] == 'positivo']['review_text'].iloc[0])
+
+# Exemplo de avaliação negativa
+print("\nExemplo de avaliação negativa:")
+print(df[df['sentiment'] == 'negativo']['review_text'].iloc[0])
+
+# Exemplo de avaliação neutra
+print("\nExemplo de avaliação neutra:")
+print(df[df['sentiment'] == 'neutro']['review_text'].iloc[0])
+```
+
+**Explicação:**
+
+- **Exemplos práticos**: Mostramos um exemplo de avaliação para cada sentimento para entender o tipo de feedback dos usuários.
+
+### **Análises Inferenciais**
+
+Vamos realizar uma análise inferencial para verificar se há diferenças significativas no comprimento das avaliações entre os diferentes sentimentos.
+
+#### 1. **Teste ANOVA**
+
+Como temos três grupos (positivo, neutro, negativo), podemos utilizar a ANOVA para testar se há diferenças significativas no comprimento médio das avaliações entre os grupos.
+
+```python
+from scipy.stats import f_oneway
+
+# Separar o comprimento das avaliações por sentimento
+positive_lengths = df[df['sentiment'] == 'positivo']['review_length']
+neutral_lengths = df[df['sentiment'] == 'neutro']['review_length']
+negative_lengths = df[df['sentiment'] == 'negativo']['review_length']
+
+# Realizar o teste ANOVA
+f_statistic, p_value = f_oneway(positive_lengths, neutral_lengths, negative_lengths)
+
+print("\nResultado do teste ANOVA:")
+print(f"Estatística F: {f_statistic:.4f}")
+print(f"Valor-p: {p_value:.4f}")
+```
+
+**Interpretação:**
+
+- **Hipótese Nula (H₀)**: As médias dos comprimentos das avaliações são iguais entre os grupos.
+- **Hipótese Alternativa (H₁)**: Pelo menos uma das médias dos grupos é diferente.
+- **Análise do Valor-p**: Se o valor-p for menor que 0,05, rejeitamos H₀, indicando diferenças significativas.
+
+#### 2. **Teste t de Student (para comparação entre dois grupos)**
+
+Se quisermos comparar apenas dois grupos (por exemplo, positivo e negativo), podemos usar o teste t de Student.
+
+```python
+from scipy.stats import ttest_ind
+
+# Comparar avaliações positivas e negativas
+t_statistic, p_value = ttest_ind(positive_lengths, negative_lengths, equal_var=False)
+
+print("\nResultado do teste t de Student (positivo vs negativo):")
+print(f"Estatística t: {t_statistic:.4f}")
+print(f"Valor-p: {p_value:.4f}")
+```
+
+**Interpretação:**
+
+- **Hipótese Nula (H₀)**: As médias dos comprimentos das avaliações positivas e negativas são iguais.
+- **Hipótese Alternativa (H₁)**: As médias dos comprimentos das avaliações são diferentes.
+- **Análise do Valor-p**: Um valor-p menor que 0,05 indica diferença significativa.
+
+#### 3. **Análise de Correlação**
+
+Podemos analisar se existe correlação entre a nota (rating) e o comprimento da avaliação.
+
+```python
+# Calcular correlação de Pearson
+correlation = df['rating'].corr(df['review_length'])
+
+print("\nCorrelação entre nota e comprimento da avaliação:")
+print(f"Coeficiente de correlação de Pearson: {correlation:.4f}")
+```
+
+**Interpretação:**
+
+- **Coeficiente de Correlação**:
+  - Próximo de 1: forte correlação positiva.
+  - Próximo de -1: forte correlação negativa.
+  - Próximo de 0: pouca ou nenhuma correlação linear.
+
+### **Conclusões**
+
+- **Distribuição das Notas e Sentimentos**: A maioria das avaliações é positiva, indicando satisfação dos clientes, ou há um equilíbrio entre os sentimentos?
+- **Comprimento das Avaliações**: Avaliações negativas tendem a ser mais detalhadas? Isso pode indicar que clientes insatisfeitos fornecem mais feedback.
+- **Palavras Mais Frequentes**: As palavras mais usadas refletem aspectos específicos do produto ou serviço?
+- **Diferenças Significativas**: Se os testes estatísticos indicam diferenças significativas, podemos afirmar que o sentimento influencia o comportamento de escrita dos usuários.
+- **Correlação**: Uma correlação significativa entre nota e comprimento pode sugerir que avaliações com certas notas tendem a ser mais longas ou curtas.
+
+### **Próximos Passos**
+
+- **Visualizações Adicionais**: Criar nuvens de palavras (word clouds) para visualizar as palavras mais frequentes.
+- **Análise de Sentimento Detalhada**: Explorar quais aspectos são mais mencionados em cada sentimento.
+- **Preparação para Modelagem**: Utilizar os insights obtidos para orientar o treinamento dos classificadores.
+
+---
+
+**Observação**: Como estamos trabalhando com dados fictícios, os resultados são ilustrativos. Em um contexto real, essas análises forneceriam insights valiosos sobre o comportamento dos clientes e poderiam influenciar estratégias de negócio.
+
+Se precisar de ajuda adicional ou tiver dúvidas sobre qualquer parte do código ou interpretação dos resultados, estou à disposição!
