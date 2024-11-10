@@ -1,6 +1,14 @@
-**Projeto:** Implementar Análise de Sentimentos em Avaliações de Produtos
+# NPL Sentinel
 
-**Especificações:**
+[NPL Sentinel Banner](./images/npl-sentinel.png)
+
+## Análise de Sentimento em Avaliações de Produtos
+
+### Sobre o Projeto
+
+O objetivo do projeto é implementar Análise de Sentimentos em Avaliações de Produtos submetidas por usuários.
+
+### Especificações
 
 1. **Coleta de Dados:**
 
@@ -20,7 +28,7 @@
     - Reportar resultados (F1 e acurácia) e análises em slides.
     - Produzir um vídeo com duração máxima de 15 minutos.
 
-**Etapas do Projeto:**
+### Etapas do Projeto
 
 1. **Coleta de Dados de Avaliações de Produtos:**
 
