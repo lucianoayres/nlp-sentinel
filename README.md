@@ -1,6 +1,6 @@
 # NPL Sentinel
 
-![NPL Sentinel Banner](./images/npl-sentinel.png)
+![NPL Sentinel Banner](./images/sentinel_banner.png)
 
 ## Análise de Sentimento em Avaliações de Produtos
 
