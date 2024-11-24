@@ -711,3 +711,384 @@ review,rating
 "Chegou danificado e o suporte foi ineficiente.",1  
 "Produto eficiente, mas o material poderia ser melhor.",3  
 "Entrega rápida e embalagem impecável, adorei.",5
+"O produto é compacto, mas bastante eficiente.",4  
+"A funcionalidade é ótima, mas o preço é muito alto.",3  
+"Recebi muito rápido e adorei o desempenho.",5  
+"O material parece resistente, mas é muito pesado.",3  
+"O design é sofisticado, mas o desempenho não impressiona.",3  
+"É um bom produto, mas não é ideal para quem busca alta performance.",3  
+"Entrega muito rápida, mas a qualidade do material é apenas mediana.",3  
+"O atendimento foi excelente, mas o produto não superou minhas expectativas.",4  
+"Produto atende bem às necessidades básicas, mas não é inovador.",3  
+"Recebi um item em perfeitas condições e adorei o desempenho.",5  
+"O suporte técnico foi difícil de contatar, mas resolveram meu problema.",3  
+"O acabamento é ótimo, mas o desempenho é inconsistente.",2  
+"Chegou com um leve arranhão, mas ainda funciona muito bem.",4  
+"Não atende às especificações descritas, fiquei decepcionado.",2  
+"Produto muito funcional, perfeito para o dia a dia.",5  
+"O design é bonito, mas o material poderia ser mais resistente.",3  
+"Funciona bem, mas a durabilidade deixa a desejar.",2  
+"O manual de instruções foi claro e fácil de seguir.",5  
+"O preço não compensa a qualidade oferecida.",2  
+"Chegou bem embalado e atendeu minhas expectativas.",4  
+"O desempenho é bom, mas o produto é barulhento.",3  
+"Material de qualidade e ótima usabilidade, recomendo.",5  
+"A embalagem estava intacta e o produto é exatamente como descrito.",5  
+"Produto frágil, quebrou após pouco tempo de uso.",1  
+"O custo-benefício é excelente, estou muito satisfeito.",5  
+"A configuração inicial foi complicada, mas valeu a pena.",4  
+"Fiquei impressionado com a entrega rápida e o desempenho do produto.",5  
+"O design é arrojado, mas o funcionamento é básico.",3  
+"O produto cumpre bem sua proposta, nada de excepcional.",4  
+"Chegou com um atraso considerável, mas a qualidade é ótima.",4  
+"Não gostei da textura do material, parece muito frágil.",2  
+"Produto incrível, superou minhas expectativas.",5  
+"O atendimento ao cliente foi excelente, resolveram tudo rápido.",5  
+"O desempenho é satisfatório, mas esperava mais funcionalidades.",3  
+"O material é fraco, não recomendo para uso intenso.",2  
+"Produto atende bem para tarefas simples, mas não para profissionais.",3  
+"Chegou antes do prazo e está funcionando perfeitamente.",5  
+"O manual é muito básico, senti falta de mais detalhes técnicos.",3  
+"O design é atraente, mas o produto não é muito prático.",2  
+"Entrega rápida, mas o suporte técnico foi confuso.",3  
+"Produto eficiente e muito silencioso, gostei muito.",5  
+"O preço é alto para a funcionalidade oferecida.",3  
+"Produto veio com um pequeno defeito, mas consegui consertar sozinho.",3  
+"O desempenho é mediano, ideal para quem não exige muito.",3  
+"Fácil de montar, estou muito satisfeito com a compra.",5  
+"Chegou amassado, mas o produto funciona normalmente.",3  
+"O design moderno é o ponto alto, mas falta praticidade.",3  
+"Não gostei, esperava algo mais intuitivo.",2  
+"Produto excelente para o preço, recomendo sem dúvidas.",5  
+"Entrega dentro do prazo, mas o produto é muito básico.",3  
+"A embalagem foi bem feita, o produto chegou intacto.",4  
+"Material de ótima qualidade, mas um pouco pesado.",4  
+"O atendimento foi rápido, mas o produto veio com defeito.",2  
+"O custo-benefício é ótimo, funciona muito bem.",5  
+"Recebi com atraso e o desempenho não é dos melhores.",2  
+"O manual poderia ser mais explicativo, mas o produto é bom.",4  
+"O material é de baixa qualidade, mas atende ao básico.",3  
+"O design é bonito e o produto é funcional, gostei.",5  
+"Produto frágil, precisa ser manuseado com cuidado.",2  
+"Adorei o acabamento, mas a funcionalidade é limitada.",3  
+"O produto é útil, mas não oferece grande diferencial.",3  
+"Recebi dentro do prazo, muito satisfeito com a eficiência.",5  
+"A durabilidade é questionável, mas o desempenho é bom.",3  
+"O atendimento foi ruim, não recomendo essa loja.",1  
+"O produto chegou rápido e já está em uso, estou adorando.",5  
+"Material é razoável, mas o design compensa.",4  
+"O preço é elevado, mas o desempenho é excelente.",5  
+"O produto apresenta bom desempenho, mas é complicado de usar.",3  
+"Recebi tudo conforme combinado, muito bom.",5  
+"Fácil de usar e bem silencioso, ideal para quem busca praticidade.",5  
+"Produto chegou com peças erradas, uma experiência ruim.",2  
+"O suporte foi ágil e resolveu o problema rapidamente.",4  
+"Produto atende bem, mas não surpreende.",3  
+"O acabamento é impecável, gostei muito do design.",5  
+"Não correspondeu às minhas expectativas, fiquei frustrado.",2  
+"Recebi um produto com bom desempenho, mas esperava mais funcionalidades.",4  
+"A embalagem estava intacta, o produto é bem resistente.",5  
+"O design é interessante, mas achei o preço alto.",3  
+"O produto é robusto e eficiente, recomendo fortemente.",5  
+"Chegou com defeito, tive que solicitar a troca.",1  
+"O desempenho é bom, mas o manual de instruções é confuso.",3  
+"Achei o preço justo pelo que o produto oferece.",4  
+"Não recomendo, o material é de baixa qualidade.",1  
+"O design é funcional e bem pensado, estou muito satisfeito.",5  
+"Recebi antes do prazo e o produto é exatamente como descrito.",5  
+"Gostei do produto, mas esperava uma entrega mais rápida.",4  
+"O suporte técnico demorou para responder, mas resolveu o problema.",3  
+"Produto eficiente, mas não vale o preço cobrado.",3  
+"A embalagem estava perfeita e o produto chegou intacto.",5  
+"O desempenho foi satisfatório, mas a durabilidade é uma incógnita.",3  
+"O produto veio em perfeitas condições, adorei o acabamento.",5  
+"Chegou com um pequeno atraso, mas estou satisfeito com o resultado.",4  
+"Produto simples e funcional, ideal para quem busca o básico.",4  
+"O design é bonito, mas o desempenho é apenas razoável.",3  
+"Gostei do atendimento, mas o produto é bem básico.",3  
+"Produto funcional, mas senti falta de mais acessórios.",4  
+"O custo-benefício é excelente, não me arrependo da compra.",5
+"A câmera é ótima, mas a bateria não dura o dia todo.",3  
+"Design elegante e leve, perfeito para o dia a dia.",5  
+"A tela é grande e nítida, mas o som poderia ser melhor.",4  
+"O processador é rápido, mas esquenta um pouco em uso intenso.",3  
+"Bateria excelente, dura o dia inteiro com uso moderado.",5  
+"Recebi com atraso, mas o aparelho atendeu às minhas expectativas.",4  
+"A qualidade da câmera frontal me decepcionou.",2  
+"Funciona perfeitamente para redes sociais e aplicativos básicos.",5  
+"O armazenamento é limitado, tive que comprar um cartão de memória.",3  
+"Gostei do sistema operacional, é bem intuitivo.",4  
+"Recebi com defeito no botão lateral, tive que trocar.",1  
+"A câmera traseira é incrível, ótima para fotos noturnas.",5  
+"Produto frágil, quebrou na primeira queda.",1  
+"Adorei o desempenho nos jogos, roda tudo sem travar.",5  
+"O som dos alto-falantes não é muito alto, mas é claro.",4  
+"A tela é excelente, mesmo sob luz do sol forte.",5  
+"Demorou para chegar e o carregador veio com defeito.",2  
+"O preço é justo para as funcionalidades oferecidas.",4  
+"Design moderno, mas o aparelho é um pouco pesado.",3  
+"Os aplicativos abrem rapidamente, sem travamentos.",5  
+"Achei o material muito frágil, esperava algo mais robusto.",2  
+"O carregamento rápido é um diferencial incrível.",5  
+"A tela tem cores vivas, ótimo para assistir vídeos.",5  
+"A câmera frontal é boa, mas o modo retrato poderia ser melhor.",4  
+"O sensor de impressão digital funciona muito bem.",5  
+"Recebi com a caixa danificada, mas o produto estava intacto.",3  
+"Durabilidade da bateria deixou a desejar, descarrega rápido.",2  
+"O desempenho é impressionante, mesmo com vários aplicativos abertos.",5  
+"O brilho automático da tela às vezes falha.",3  
+"Design bonito, mas a traseira arranha facilmente.",3  
+"Ótimo custo-benefício, recomendo para quem busca um aparelho básico.",5  
+"A qualidade de construção é excelente, muito resistente.",5  
+"Os fones de ouvido que acompanham o aparelho são de baixa qualidade.",2  
+"A câmera grava vídeos em alta resolução, fiquei impressionado.",5  
+"Não gostei do tamanho, é muito grande para caber no bolso.",2  
+"O aparelho é rápido, mas a interface poderia ser mais amigável.",4  
+"A bateria dura bem, mesmo com uso intenso.",5  
+"Gostei do desempenho, mas o armazenamento é limitado.",3  
+"Os widgets são úteis e fáceis de configurar.",5  
+"Recebi com a tela trincada, experiência frustrante.",1  
+"O áudio no viva-voz é claro e potente.",5  
+"Achei o aparelho caro para as especificações oferecidas.",2  
+"A câmera com zoom é incrível, sem perda de qualidade.",5  
+"O aparelho trava com frequência em jogos mais pesados.",2  
+"O carregamento sem fio é prático e funciona bem.",5  
+"Os botões são bem localizados, muito fácil de usar.",5  
+"O aparelho esquenta durante chamadas longas.",3  
+"Boa opção para quem usa aplicativos de produtividade.",4  
+"O GPS é preciso e conecta rapidamente.",5  
+"O aparelho tem muitas funcionalidades, mas o manual não é claro.",3  
+"O preço é competitivo, levando em conta a marca e o desempenho.",4  
+"O sistema de reconhecimento facial não funciona bem no escuro.",3  
+"A resistência à água é ótima, usei sem problemas na chuva.",5  
+"Comprei pela câmera, mas o restante do aparelho me surpreendeu.",5  
+"O som no fone de ouvido é incrível, muito nítido.",5  
+"Desempenho razoável, mas esperava mais da bateria.",3  
+"O aparelho veio com película instalada, adorei esse detalhe.",5  
+"A tela tem uma ótima resolução, mas reflete muito a luz.",4  
+"Não gostei do sistema operacional, prefiro outros.",2  
+"O espaço de armazenamento é excelente, não precisei de cartão extra.",5  
+"O aparelho é muito leve, quase não sinto no bolso.",5  
+"A configuração inicial foi rápida e fácil.",5  
+"A qualidade das fotos em ambientes com pouca luz é incrível.",5  
+"O tempo de carregamento é rápido, mas esquenta um pouco.",4  
+"Recebi no prazo e o aparelho superou minhas expectativas.",5  
+"Não gostei da posição do botão de volume, é desconfortável.",3  
+"Funciona bem, mas o som poderia ser mais alto no viva-voz.",4  
+"A bateria dura dois dias com uso moderado, excelente.",5  
+"Gostei da interface limpa e intuitiva.",5  
+"A câmera tem recursos avançados, mas exige prática para usar bem.",4  
+"O aparelho não é compatível com alguns aplicativos que uso.",2  
+"É robusto e resistente, perfeito para o meu uso.",5  
+"Veio com uma capinha na caixa, um ótimo brinde.",5  
+"O sensor de proximidade não funciona bem, desliga a tela errado.",2  
+"A câmera tem ótima estabilização para vídeos.",5  
+"O aparelho é bonito, mas os acessórios são de baixa qualidade.",3  
+"A conexão com o Wi-Fi é estável e rápida.",5  
+"A entrega foi rápida, mas a caixa veio um pouco amassada.",3  
+"A qualidade do áudio é ótima para chamadas.",5  
+"Não gostei do peso, é muito desconfortável para uso prolongado.",2  
+"O armazenamento interno é generoso, consigo instalar muitos apps.",5  
+"Funciona bem para jogos casuais, sem travar.",5  
+"Gostei do acabamento em metal, dá uma sensação premium.",5  
+"Não recomendo para quem busca uma câmera de alta qualidade.",2  
+"O carregamento rápido realmente faz a diferença no dia a dia.",5  
+"A tela é resistente, mesmo sem película.",5  
+"O desempenho em multitarefa é excelente.",5  
+"Os sensores respondem rapidamente, é muito preciso.",5  
+"Não gostei da duração da bateria, esperava mais.",2  
+"O aparelho é ideal para quem usa redes sociais com frequência.",4  
+"A qualidade do vídeo é incrível, parece profissional.",5  
+"O design minimalista é muito bonito, adorei.",5  
+"O aparelho trava ao usar aplicativos pesados.",2  
+"É compatível com diversos acessórios, isso é ótimo.",5  
+"Os atalhos personalizáveis são muito úteis.",5 
+"A qualidade do som nos fones é surpreendente, muito claro.",5  
+"O reconhecimento facial funciona rápido, mesmo com pouca luz.",5  
+"A câmera ultra-wide captura imagens incríveis.",5  
+"Não gostei do acabamento de plástico, parece frágil.",2  
+"Ótimo desempenho em streaming, sem travamentos.",5  
+"O carregamento via USB-C é muito eficiente.",5  
+"A bateria demora para carregar, mesmo com o carregador rápido.",3  
+"A tela curva dá um toque premium, adorei.",5  
+"Ótima relação custo-benefício, recomendo para uso diário.",5  
+"O desempenho no 5G é excelente, navegação muito rápida.",5  
+"O modo retrato desfoca o fundo com perfeição.",5  
+"A câmera frontal não tem boa qualidade para chamadas de vídeo.",2  
+"Recebi com a caixa lacrada, tudo em perfeitas condições.",5  
+"Gostei da resistência à poeira e respingos.",5  
+"Os botões de volume poderiam ser mais firmes.",3  
+"Ótima experiência em videochamadas, a câmera é muito nítida.",5  
+"O armazenamento de 128GB é mais do que suficiente para mim.",5  
+"O celular é muito pesado, desconfortável para segurar por muito tempo.",2  
+"A função de gravação em 4K é impressionante.",5  
+"Design lindo, mas a tela é um ímã de impressões digitais.",3  
+"O modo noturno da câmera faz milagres em baixa luz.",5  
+"O carregador que veio na caixa não é compatível com tomadas no Brasil.",2  
+"Produto com ótimo custo-benefício, uso há meses sem problemas.",5  
+"O aparelho esquenta muito ao usar aplicativos pesados.",3  
+"A tela de 120Hz é super fluida, ótima para jogos.",5  
+"A câmera macro é divertida, mas pouco prática.",4  
+"O som estéreo proporciona uma ótima experiência em filmes.",5  
+"A duração da bateria é excelente, uso o dia todo sem carregar.",5  
+"O carregamento sem fio não é tão rápido quanto esperava.",3  
+"A personalização do sistema é ótima, muitos temas disponíveis.",5  
+"O touch é super responsivo, nunca tive problemas.",5  
+"A qualidade do material dá uma sensação premium.",5  
+"Não gostei do brilho automático, às vezes fica muito escuro.",3  
+"A câmera frontal não é boa para selfies em ambientes internos.",3  
+"A conectividade Bluetooth é estável, conecta rápido com fones.",5  
+"Não gostei da interface, prefiro algo mais simples.",2  
+"Ótima resolução de tela, perfeita para assistir séries.",5  
+"Os aplicativos pré-instalados ocupam muito espaço.",3  
+"O modo de economia de energia é super eficiente.",5  
+"A capinha que acompanha o produto é de baixa qualidade.",2  
+"O design sem bordas é lindo, mas exige mais cuidado no manuseio.",5  
+"A câmera superzoom entrega detalhes incríveis.",5  
+"O leitor de digitais é rápido, mas a localização é um pouco desconfortável.",4  
+"Não gostei da qualidade da tela sob luz do sol.",3  
+"Funciona bem para jogos e multitarefa, muito satisfeito.",5  
+"O sistema de som Dolby Atmos é fantástico.",5  
+"O microfone é nítido em gravações, ótima qualidade.",5  
+"Não suporta alguns aplicativos mais antigos que eu uso.",2  
+"Gostei do carregamento turbo, é muito rápido.",5  
+"O design é moderno, mas o aparelho é grande demais para mãos pequenas.",3  
+"A câmera faz vídeos incríveis em câmera lenta.",5  
+"O celular veio com a película já instalada, gostei muito.",5  
+"O GPS funciona bem, mesmo em áreas com sinal fraco.",5  
+"A bateria descarrega rápido em jogos pesados.",3  
+"Os alto-falantes são potentes, mas distorcem no volume máximo.",4  
+"O sistema Android puro é bem leve e fácil de usar.",5  
+"A câmera selfie com inteligência artificial é impressionante.",5  
+"A tela AMOLED tem cores vibrantes e ótima definição.",5  
+"Não suporta cartão de memória, o que limita o armazenamento.",3  
+"O celular é resistente a quedas, já testei sem querer!",5  
+"O carregamento rápido é eficiente, mas o cabo é curto.",4  
+"O desempenho é ótimo, mesmo com vários apps abertos.",5  
+"A conectividade Wi-Fi 6 é super estável e rápida.",5  
+"O celular é bem fino, fácil de carregar no bolso.",5  
+"Os recursos de acessibilidade são excelentes.",5  
+"O desbloqueio facial é um pouco lento às vezes.",3  
+"Os atalhos do sistema facilitam muito o uso no dia a dia.",5  
+"O som do viva-voz poderia ser mais nítido.",3  
+"A câmera traseira é excelente, mas falta estabilização em vídeos.",4  
+"O aparelho não vem com fones de ouvido na caixa.",3  
+"Os gestos para navegação são intuitivos e úteis.",5  
+"O celular esquenta muito durante carregamento rápido.",3  
+"O brilho máximo da tela é excelente para uso ao ar livre.",5  
+"A função Always-On Display é prática e bonita.",5  
+"O celular é muito resistente, já caiu várias vezes sem problemas.",5  
+"O sistema de notificações é bem organizado, gostei muito.",5  
+"Os botões laterais são fáceis de alcançar, ótimo design.",5  
+"O modo de leitura é excelente para uso noturno.",5  
+"O celular é bonito, mas deixa muitas marcas de dedo.",3  
+"Adorei a funcionalidade de parear com outros dispositivos.",5  
+"O aparelho vem com muitos aplicativos desnecessários.",3  
+"O reconhecimento facial não funciona bem com óculos.",3  
+"Gostei do tamanho da tela, ideal para assistir vídeos.",5  
+"O aparelho não suporta carregamento rápido em 30W, como anunciado.",3  
+"O design é impecável, mas poderia ser mais leve.",4  
+"Os gráficos em jogos são incríveis, sem lags.",5  
+"O smartphone não tem entrada para fone de ouvido, ponto negativo.",3  
+"O armazenamento de 256GB é mais do que suficiente para mim.",5  
+"A duração da bateria me surpreendeu positivamente.",5  
+"A câmera tem muitas funcionalidades, mas o app trava às vezes.",3  
+"O celular é rápido em tarefas diárias, muito satisfeito.",5  
+"Os acessórios na caixa são simples, mas funcionais.",4  
+"O leitor de digitais na tela é uma novidade bem-vinda.",5  
+"A qualidade das fotos em ambientes claros é excelente.",5
+"A bateria dura dois dias inteiros com uso moderado.",5  
+"A qualidade da tela é excelente, mas achei as bordas grandes.",4  
+"O processador é potente, mas consome muita bateria.",3  
+"O design é bonito, mas escorrega fácil da mão.",3  
+"A câmera ultra-wide tem um ótimo campo de visão.",5  
+"O sistema operacional tem muitos recursos úteis.",5  
+"Não gostei da duração da bateria, descarrega rápido com jogos.",2  
+"É ótimo para vídeos, a tela tem excelente definição.",5  
+"O som é bom, mas poderia ter mais graves.",4  
+"Não vem com entrada para cartão SD, o que é frustrante.",2  
+"A conectividade 5G é muito rápida, perfeito para streaming.",5  
+"A câmera selfie tem boa qualidade, mas o foco é um pouco lento.",4  
+"O celular esquenta durante o uso de aplicativos pesados.",3  
+"A embalagem veio impecável e o produto é perfeito.",5  
+"O touch é muito responsivo, funciona sem falhas.",5  
+"A tela OLED tem cores vibrantes e ótima resolução.",5  
+"Não gostei do carregador que acompanha o aparelho, muito lento.",2  
+"O reconhecimento de voz é excelente, funciona bem em ambientes barulhentos.",5  
+"Os aplicativos pré-instalados ocupam muito espaço.",3  
+"Gostei da interface limpa e moderna.",5  
+"O celular é um pouco pesado, mas robusto.",4  
+"Funciona bem para jogos leves, mas trava nos mais pesados.",3  
+"A câmera traseira tira fotos incríveis, mesmo à noite.",5  
+"Recebi no prazo e estou muito satisfeito com o desempenho.",5  
+"O modo de gravação em 8K é fantástico.",5  
+"A memória RAM de 8GB garante multitarefa sem travamentos.",5  
+"O carregamento wireless é lento, mas funcional.",3  
+"O design minimalista é muito elegante.",5  
+"O botão lateral é um pouco duro, difícil de apertar.",3  
+"A qualidade das chamadas é excelente, som bem nítido.",5  
+"O aparelho é ótimo para produtividade, aplicativos rodam bem.",5  
+"Não recomendo para quem gosta de jogos, o desempenho é fraco.",2  
+"O sistema de câmeras faz fotos profissionais, adorei.",5  
+"A duração da bateria é boa, mas esperava mais pelo preço.",4  
+"O celular tem boa ergonomia, encaixa bem na mão.",5  
+"A tela tem um brilho muito bom, até sob o sol.",5  
+"O aparelho veio com alguns arranhões, mas funciona bem.",3  
+"É ótimo para estudantes, muito eficiente para tarefas simples.",5  
+"Não gostei da qualidade do cabo USB que acompanha o celular.",2  
+"O suporte técnico foi excelente, resolveu meu problema rapidamente.",5  
+"A funcionalidade de gravar a tela é muito prática.",5  
+"O celular é bonito, mas esquenta durante chamadas longas.",3  
+"A câmera faz vídeos em câmera lenta com muita nitidez.",5  
+"A qualidade da construção é excelente, passa confiança.",5  
+"Não gostei do software, prefiro interfaces mais simples.",2  
+"O carregamento rápido realmente é um diferencial.",5  
+"A tela ocupa quase toda a frente, visual muito moderno.",5  
+"A câmera tira fotos boas, mas o HDR não é tão eficiente.",3  
+"A bateria dura bem, mesmo com uso intenso de redes sociais.",5  
+"Não gostei da qualidade do alto-falante, som distorcido no volume máximo.",2  
+"O celular roda bem jogos como PUBG e Fortnite.",5  
+"A função Always-On Display consome pouca bateria.",5  
+"O desbloqueio facial é prático e rápido.",5  
+"Não suporta carregamento rápido com cabos genéricos, o que é frustrante.",3  
+"A construção em metal dá um toque premium ao aparelho.",5  
+"Gostei do modo de leitura, ótimo para usar à noite.",5  
+"O aparelho veio com película e capinha, um ótimo bônus.",5  
+"A câmera frontal com inteligência artificial melhora bastante as selfies.",5  
+"Não gostei da vibração, achei muito fraca.",3  
+"A bateria demora um pouco para carregar, mas dura bastante.",4  
+"O sistema de segurança é confiável, gostei muito do leitor de digitais.",5  
+"Os fones de ouvido não têm boa qualidade, prefiro usar outro modelo.",2  
+"A câmera principal tem ótima resolução e estabilização.",5  
+"O celular é pesado, mas a bateria compensa.",4  
+"Gostei da opção de expandir o armazenamento via nuvem.",5  
+"O modo de economia de bateria é eficiente e intuitivo.",5  
+"Não gostei do tamanho, é muito grande para segurar com uma mão.",3  
+"A tela tem ótima nitidez, mesmo em vídeos com baixa qualidade.",5  
+"O aparelho vem com atualizações frequentes, gostei disso.",5  
+"Gostei da integração com outros dispositivos da marca.",5  
+"O microfone capta áudio muito bem, ótimo para gravações.",5  
+"O celular não vem com carregador na caixa, o que foi decepcionante.",2  
+"A câmera com zoom óptico é incrível, detalhes impressionantes.",5  
+"O som estéreo melhora muito a experiência em músicas e filmes.",5  
+"O celular veio em perfeitas condições e funcionando perfeitamente.",5  
+"Gostei do recurso de gestos, é muito prático.",5  
+"A traseira de vidro é bonita, mas deixa muitas marcas de dedo.",4  
+"O sistema de notificações é muito bem organizado.",5  
+"A câmera não tem boa qualidade em ambientes com pouca luz.",2  
+"A função de gravação de tela salva em ótima qualidade.",5  
+"Não gostei da interface do sistema, prefiro algo mais limpo.",3  
+"O GPS é rápido e preciso, mesmo em áreas com sinal fraco.",5  
+"A duração da bateria me surpreendeu, dura o dia inteiro.",5  
+"A tela é resistente, mesmo sem película protetora.",5  
+"O celular suporta carregamento rápido e sem fio, muito prático.",5  
+"Não vem com fone de ouvido, mas isso já era esperado.",3  
+"Adorei a integração com assistentes de voz, muito funcional.",5  
+"A qualidade do material é boa, mas prefiro um design menos brilhante.",4  
+"Funciona bem com vários dispositivos Bluetooth conectados ao mesmo tempo.",5  
+"Gostei da opção de personalizar a interface com temas e cores.",5  
+"O carregamento demora muito com cabos genéricos.",3  
+"É excelente para assistir vídeos, a tela é muito imersiva.",5  
+"Os botões laterais têm um bom clique, fáceis de usar.",5  
+"A resistência à água me deu mais segurança no uso.",5  
+"Gostei muito do acabamento fosco, não deixa marcas de dedo.",5  
