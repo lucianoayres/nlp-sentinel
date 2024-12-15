@@ -1,36 +1,155 @@
-# NPL Sentinel
+# NPL-Sentinel
 
-![NPL Sentinel Banner](./images/sentinel_banner.png)
+![NPL Sentinel Banner](images/sentinel_banner.png)
 
-## Análise de Sentimento em Avaliações de Produtos
+## Table of Contents
 
-### Sobre o Projeto
+1. [Project Overview](#project-overview)
+2. [Objectives](#objectives)
+3. [Models and Approaches](#models-and-approaches)
+4. [Data Description](#data-description)
+5. [Sample Data](#sample-data)
+6. [Running the Project](#running-the-project)
+7. [Repository Structure](#repository-structure)
+8. [Results and Performance](#results-and-performance)
+   - [Classical & Neural Models (SVM, BERT)](#classical--neural-models-svm-bert)
+   - [LLM In-Context Learning (OpenAI and Google Gemini)](#llm-in-context-learning-openai-and-google-gemini)
+9. [Contributions](#contributions)
 
-O objetivo do projeto é implementar Análise de Sentimentos em Avaliações de Produtos submetidas por usuários.
+---
 
-### Especificações
+## Project Overview
 
-1. **Coleta de Dados:**
+**NPL-Sentinel** is a Natural Language Processing (NLP) project focused on **sentiment analysis** of consumer product reviews. While the models implemented here do not target maximum predictive accuracy, the main goal is to explore and apply NLP training techniques and methodologies to a realistic scenario—analyzing consumer sentiments toward a smartphone product.
 
-   - Dataset: Avaliações dos usuários (texto e nota) para um produto selecionado.
-   - Produto Selecionado: Smartphone
+The name **NPL-Sentinel** conveys the idea of a "sentinel" continuously monitoring opinions to uncover trends and insights that drive informed decision-making.
 
-2. **Pré-processamento:**
+---
 
-   - Limpeza dos textos (remoção de stopwords, pontuação, normalização, etc.).
-   - Conversão das notas em rótulos de sentimento (positivo, negativo, neutro).
+## Objectives
 
-3. **Treinamento de Classificadores:**
+1. **Sentiment Classification:** Identify whether a given product review is positive, neutral, or negative.
+2. **Rating Correlation:** Examine the relationship between sentiment polarity and the consumers’ numerical ratings.
+3. **Exploratory Analysis:** Identify prominent words, entities, bigrams, trigrams, and patterns in textual data.
+4. **Model Comparison:** Compare the performance of various models, including classical machine learning approaches, transformer-based models (BERT), and Large Language Models (LLMs) via In-Context Learning.
 
-   - **SVM + Bag-of-Words (BoW):** Classificador SVM utilizando representações BoW.
-   - **SVM + Embeddings:** Classificador SVM utilizando embeddings de palavras.
-   - **BERT:** Modelo BERT treinado para classificação de sentimento.
+---
 
-4. **In-Context Learning:**
+## Models and Approaches
 
-   - **OpenAI GPT-4o:** LLM da OpenAI utilizando Modelo GPT-4o para a classificação de sentimento.
-   - **Google Gemini 1.5:** LLM do Google utilizando Modelo Gemini 1.5 para a classificação de sentimento.
+- **SVM + Bag of Words (BoW):** Classic machine learning approach using simple text vectorization.
+- **SVM + Embeddings (spaCy):** Using pre-trained Portuguese embeddings for semantic representation.
+- **BERT (Fine-tuned):** Adapting a pre-trained BERT model (Portuguese) for sentiment classification.
+- **In-Context Learning with LLMs:** Zero or few-shot classification using:
+  - **OpenAI GPT-4o**
+  - **Google Gemini**
 
-5. **Apresentação:**
-   - Resultados (F1 e acurácia) e análises em slides.
-   - Vídeo de Apresentação com duração máxima de 15 minutos.
+---
+
+## Data Description
+
+The dataset consists of:
+
+- **review:** A free-form text evaluation of the smartphone.
+- **rating (1 to 5):** A numerical score reflecting consumer satisfaction.
+
+From the rating, we derive sentiment labels as follows:
+
+- Rating ≥ 4 → Positive
+- Rating ≤ 2 → Negative
+- Rating = 3 → Neutral
+
+---
+
+## Sample Data
+
+Below are some example entries from the dataset (`reviews.csv`):
+
+| review                                                                                   | rating |
+| ---------------------------------------------------------------------------------------- | ------ |
+| "O produto é ok, nada demais. não se destaca no mercado."                                | 3      |
+| "Decepcionante, não atendeu às expectativas."                                            | 1      |
+| "Não tenho muito o que comentar, cumpre o que promete."                                  | 2      |
+| "Gostei bastante, mas poderia ter mais funcionalidades."                                 | 4      |
+| "Excelente serviço, estou muito satisfeito porque atendeu todas as minhas expectativas." | 5      |
+
+---
+
+## Running the Project
+
+This project is designed to run in **Google Colab**, not locally. Use the following placeholder link to open the notebook in Colab:
+
+**[Run in Google Colab](https://colab.research.google.com/drive/1TpvhAvSCIUNvpEGziY5FV3MKKqE0u_5T?usp=sharing)**
+
+Before running:
+
+- Ensure that you have access to the necessary data files as described in the notebook.
+- All required libraries are installed within the notebook.
+- Generate and securely store your OpenAI and Google Gemini API keys as secrets in Google Colab.
+
+---
+
+## Repository Structure
+
+The repository is organized as follows:
+
+```bash
+npl-sentinel/
+├─ data/
+│  └─ reviews.csv
+├─ images/
+│  └─ sentinel_banner.png
+├─ notebook/
+│  └─ Projeto_NPL_Sentinel_15_Dez_2024.ipynb
+├─ src/
+│  └─ projeto_npl_sentinel_15_dez_2024.py
+├─ .gitignore
+├─ LICENSE
+└─ README.md
+```
+
+**Key Files:**
+
+- **[data/reviews.csv](data/reviews.csv)**: Contains the product reviews and corresponding ratings.
+- **[images/sentinel_banner.png](images/sentinel_banner.png)**: Banner image for the project.
+- **[notebook/Projeto_NPL_Sentinel_15_Dez_2024.ipynb](notebook/Projeto_NPL_Sentinel_15_Dez_2024.ipynb)**: Main Colab notebook with all code and analyses.
+- **[src/projeto_npl_sentinel_15_dez_2024.py](src/projeto_npl_sentinel_15_dez_2024.py)**: Python script with project-related code.
+
+---
+
+## Results and Performance
+
+### Classical & Neural Models (SVM, BERT)
+
+| Model              | Accuracy | F1-Score |
+| ------------------ | -------- | -------- |
+| SVM + Bag of Words | 0.523013 | 0.477371 |
+| SVM + Embeddings   | 0.539749 | 0.487158 |
+| BERT               | 0.602510 | 0.580334 |
+
+**Key Observation:**
+Although not primarily focused on maximizing accuracy, BERT outperformed the SVM-based methods, achieving the highest accuracy and F1-Score among the tested models.
+
+---
+
+### LLM In-Context Learning (OpenAI and Google Gemini)
+
+**OpenAI GPT-4o Evaluation (Sampled Set):**
+
+- Correct Classifications: 10/10 (100% accuracy for sampled set)
+
+**Google Gemini Evaluation (Sampled Set):**
+
+- Correct Classifications: 8/10 (80% accuracy for sampled set)
+
+---
+
+## Contributions
+
+- **Authors:**
+  - Paloma Corrêa Alves (`pca2@cin.ufpe.br`)
+  - Luciano Ayres Farias de Carvalho (`lafc@cin.ufpe.br`)
+
+This project was developed as part of a **post-graduate** Deep Learning course at CIn - UFPE, under the supervision of Professor Luciano Barbosa.
+
+**NPL-Sentinel** serves as a foundation for exploring and applying NLP techniques to a product-related sentiment analysis scenario. While high accuracy was not the main goal, these experiments provide a valuable learning experience and can be extended to other domains, languages, and more complex sentiment tasks.
