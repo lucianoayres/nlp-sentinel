@@ -83,7 +83,7 @@ Below are some example entries from the dataset (`reviews.csv`):
 
 This project is designed to run in **Google Colab**, not locally. Use the following placeholder link to open the notebook in Colab:
 
-**[Run in Google Colab](https://colab.research.google.com/drive/1TpvhAvSCIUNvpEGziY5FV3MKKqE0u_5T?usp=sharing)**
+**[Run in Google Colab](https://colab.research.google.com/drive/1WwAcQrNEa5Md1hhqvQt9R4uDtFJ57JS8?usp=sharing)**
 
 Before running:
 
@@ -117,8 +117,8 @@ npl-sentinel/
 
 - **[data/reviews.csv](data/reviews.csv)**: Contains the product reviews and corresponding ratings.
 - **[images/sentinel_banner.png](images/sentinel_banner.png)**: Banner image for the project.
-- **[notebook/Projeto_NPL_Sentinel_15_Dez_2024.ipynb](notebook/Projeto_NPL_Sentinel_15_Dez_2024.ipynb)**: Main Colab notebook with all code and analyses.
-- **[src/projeto_npl_sentinel_15_dez_2024.py](src/projeto_npl_sentinel_15_dez_2024.py)**: Python script with project-related code.
+- **[notebook/Pos_Deep_Learning_Projeto_NPL_Sentinel_15_Dez_2024.ipynb](notebook/Pos_Deep_Learning_Projeto_NPL_Sentinel_22_Dez_2024.ipynb)**: Main Colab notebook with all code and analyses.
+- **[python-src/post_deep_learning_projeto_npl_sentinel_22_dez_2024.py](src/pos_deep_learning_projeto_npl_sentinel_22_dez_2024.py)**: Python script with project-related code.
 
 ---
 
@@ -128,9 +128,9 @@ npl-sentinel/
 
 | Model              | Accuracy | F1-Score |
 | ------------------ | -------- | -------- |
-| SVM + Bag of Words | 0.523013 | 0.477371 |
-| SVM + Embeddings   | 0.539749 | 0.487158 |
-| BERT               | 0.602510 | 0.580334 |
+| SVM + Bag of Words | 0.640476 | 0.630571 |
+| SVM + Embeddings   | 0.600000 | 0.583039 |
+| BERT               | 0.642857 | 0.639727 |
 
 **Key Observation:**
 Although not primarily focused on maximizing accuracy, BERT outperformed the SVM-based methods, achieving the highest accuracy and F1-Score among the tested models.
@@ -141,7 +141,7 @@ Although not primarily focused on maximizing accuracy, BERT outperformed the SVM
 
 **OpenAI GPT-4o Evaluation (Sampled Set):**
 
-- Correct Classifications: 10/10 (100% accuracy for sampled set)
+- Correct Classifications: 8/10 (80% accuracy for sampled set)
 
 **Google Gemini Evaluation (Sampled Set):**
 
