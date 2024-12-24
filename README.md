@@ -4,6 +4,7 @@
 
 - ▶️ [Vídeo da Apresentação](https://drive.google.com/file/d/1TIxEj9jhdVLBvoXU1iSPaHxqvGfuRkXf/view?usp=sharing) (15 min)
 - 📂 [Link Apresentação](https://docs.google.com/presentation/d/1GoP6OIU4CO6ypWyeoN47Ye6HG4E-Hq_R/edit?usp=sharing&ouid=114780034926001489401&rtpof=true&sd=true) (PPT)
+- 💻 [Google Colab Notebook](https://colab.research.google.com/drive/1WwAcQrNEa5Md1hhqvQt9R4uDtFJ57JS8?usp=sharing)
 
 ## Table of Contents
 
