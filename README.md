@@ -103,11 +103,12 @@ npl-sentinel/
 ├─ images/
 │  └─ sentinel_banner.png
 ├─ notebook/
-│  └─ Projeto_NPL_Sentinel_15_Dez_2024.ipynb
-├─ src/
-│  └─ projeto_npl_sentinel_15_dez_2024.py
+│  └─ Pos_Deep_Learning_Projeto_NPL_Sentinel_22_Dez_2024.ipynb
+├─ python-src/
+│  └─ pos_deep_learning_projeto_npl_sentinel_22_dez_2024.py
 ├─ .gitignore
 ├─ LICENSE
+├─ Project NLP.pdf
 └─ README.md
 ```
 
