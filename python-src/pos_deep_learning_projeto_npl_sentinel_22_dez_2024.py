@@ -35,7 +35,7 @@ Este projeto tem como **meta principal** identificar a polaridade dos sentimento
 🔹 **SVM + Embeddings**  
 🔹 **BERT**  
 🔹 **In-Context Learning**: OpenAI  
-🔹 **In-Content Learning**: Google Gemini  
+🔹 **In-Context Learning**: Google Gemini  
 
 ### 📑 Sobre os Dados  
 Os dados utilizados consistem em:  
