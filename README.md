@@ -1,4 +1,4 @@
-# NPL-Sentinel
+# NLP-Sentinel
 
 ![NPL Sentinel Banner](images/sentinel_banner.png)
 
