@@ -1,6 +1,6 @@
 # NLP-Sentinel
 
-![NPL Sentinel Banner](images/sentinel_banner.png)
+![NLP Sentinel Banner](images/sentinel_banner.png)
 
 - ▶️ [Vídeo da Apresentação](https://drive.google.com/file/d/1TIxEj9jhdVLBvoXU1iSPaHxqvGfuRkXf/view?usp=sharing) (15 min)
 - 📂 [Link Apresentação](https://docs.google.com/presentation/d/1GoP6OIU4CO6ypWyeoN47Ye6HG4E-Hq_R/edit?usp=sharing&ouid=114780034926001489401&rtpof=true&sd=true) (PPT)
@@ -24,9 +24,9 @@
 
 ## Project Overview
 
-**NPL-Sentinel** is a Natural Language Processing (NLP) project focused on **sentiment analysis** of consumer product reviews. While the models implemented here do not target maximum predictive accuracy, the main goal is to explore and apply NLP training techniques and methodologies to a realistic scenario—analyzing consumer sentiments toward a smartphone product.
+**NLP-Sentinel** is a Natural Language Processing (NLP) project focused on **sentiment analysis** of consumer product reviews. While the models implemented here do not target maximum predictive accuracy, the main goal is to explore and apply NLP training techniques and methodologies to a realistic scenario—analyzing consumer sentiments toward a smartphone product.
 
-The name **NPL-Sentinel** conveys the idea of a "sentinel" continuously monitoring opinions to uncover trends and insights that drive informed decision-making.
+The name **NLP-Sentinel** conveys the idea of a "sentinel" continuously monitoring opinions to uncover trends and insights that drive informed decision-making.
 
 ---
 
@@ -98,7 +98,7 @@ Before running:
 The repository is organized as follows:
 
 ```bash
-npl-sentinel/
+nlp-sentinel/
 ├─ data/
 │  └─ reviews.csv
 ├─ images/
@@ -157,4 +157,4 @@ Although not primarily focused on maximizing accuracy, BERT outperformed the SVM
 
 This project was developed as part of a **post-graduate** Deep Learning course at CIn - UFPE, under the supervision of Professor Luciano Barbosa.
 
-**NPL-Sentinel** serves as a foundation for exploring and applying NLP techniques to a product-related sentiment analysis scenario. While high accuracy was not the main goal, these experiments provide a valuable learning experience and can be extended to other domains, languages, and more complex sentiment tasks.
+**NLP-Sentinel** serves as a foundation for exploring and applying NLP techniques to a product-related sentiment analysis scenario. While high accuracy was not the main goal, these experiments provide a valuable learning experience and can be extended to other domains, languages, and more complex sentiment tasks.
