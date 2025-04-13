@@ -1,160 +1,141 @@
 # NLP-Sentinel
 
-![NLP Sentinel Banner](images/sentinel_banner.png)
+**Análise de Sentimentos em Português usando Deep Learning e LLMs**
 
-- ▶️ [Vídeo da Apresentação](https://drive.google.com/file/d/1TIxEj9jhdVLBvoXU1iSPaHxqvGfuRkXf/view?usp=sharing) (15 min)
-- 📂 [Link Apresentação](https://docs.google.com/presentation/d/1GoP6OIU4CO6ypWyeoN47Ye6HG4E-Hq_R/edit?usp=sharing&ouid=114780034926001489401&rtpof=true&sd=true) (PPT)
-- 💻 [Google Colab Notebook](https://colab.research.google.com/drive/1WwAcQrNEa5Md1hhqvQt9R4uDtFJ57JS8?usp=sharing)
+Uma solução completa para classificação de sentimentos em avaliações de e-commerce usando técnicas avançadas de Deep Learning e Processamento de Linguagem Natural.
 
-## Table of Contents
+## Documentação e Recursos
 
-1. [Project Overview](#project-overview)
-2. [Objectives](#objectives)
-3. [Models and Approaches](#models-and-approaches)
-4. [Data Description](#data-description)
-5. [Sample Data](#sample-data)
-6. [Running the Project](#running-the-project)
-7. [Repository Structure](#repository-structure)
-8. [Results and Performance](#results-and-performance)
-   - [Classical & Neural Models (SVM, BERT)](#classical--neural-models-svm-bert)
-   - [LLM In-Context Learning (OpenAI and Google Gemini)](#llm-in-context-learning-openai-and-google-gemini)
-9. [Contributions](#contributions)
+- 📝 [Relatório Completo](report/project-report.md)
+- 📓 [Jupyter Notebook](notebook/Pos_Deep_Learning_Projeto_NLP_Sentinel_Projeto.ipynb)
+- 💻 [Código Fonte](src/pos_deep_learning_projeto_nlp_sentinel_projeto.py)
 
----
+## Demo Online
 
-## Project Overview
+Experimente a aplicação em:  
+➡️ [Hugging Face Spaces](https://huggingface.co/spaces/layers2024/sentiment-analysis)
 
-**NLP-Sentinel** is a Natural Language Processing (NLP) project focused on **sentiment analysis** of consumer product reviews. While the models implemented here do not target maximum predictive accuracy, the main goal is to explore and apply NLP training techniques and methodologies to a realistic scenario—analyzing consumer sentiments toward a smartphone product.
+## 📊 Resultados Principais
 
-The name **NLP-Sentinel** conveys the idea of a "sentinel" continuously monitoring opinions to uncover trends and insights that drive informed decision-making.
+| Modelo              | Acurácia | F1-Score |
+|---------------------|----------|----------|
+| BERTimbau          | 94.26%   | 94.37%   |
+| XLM-RoBERTa        | 93.85%   | 93.94%   |
+| DistilBERT         | 93.28%   | 93.37%   |
+| SVM + SBERT        | 92.80%   | 92.93%   |
+| SVM + USE          | 91.95%   | 92.05%   |
 
----
+*LLMs (GPT-4, Gemini 1.5) atingiram 100% de acurácia em teste limitado (10 amostras)*
 
-## Objectives
+## 🎯 Objetivos
 
-1. **Sentiment Classification:** Identify whether a given product review is positive, neutral, or negative.
-2. **Rating Correlation:** Examine the relationship between sentiment polarity and the consumers’ numerical ratings.
-3. **Exploratory Analysis:** Identify prominent words, entities, bigrams, trigrams, and patterns in textual data.
-4. **Model Comparison:** Compare the performance of various models, including classical machine learning approaches, transformer-based models (BERT), and Large Language Models (LLMs) via In-Context Learning.
+- Implementar e comparar diferentes abordagens de Deep Learning para classificação binária de sentimentos em português
+- Avaliar trade-offs entre performance e custo computacional
+- Desenvolver uma aplicação web para demonstração em tempo real
+- Explorar o potencial de LLMs em zero-shot para análise de sentimentos em português
 
----
+## 💻 Tecnologias
 
-## Models and Approaches
+### Modelos Supervisionados
+- **Transformers**
+  - BERTimbau (BERT português, ~110M parâmetros)
+    - Base: [neuralmind/bert-base-portuguese-cased](https://huggingface.co/neuralmind/bert-base-portuguese-cased)
+    - Fine-tuned: [layers2024/bert-sentiment](https://huggingface.co/layers2024/bert-sentiment)
+  - XLM-RoBERTa (multilíngue, ~125M parâmetros)
+  - DistilBERT (multilíngue leve, ~66M parâmetros)
 
-- **SVM + Bag of Words (BoW):** Classic machine learning approach using simple text vectorization.
-- **SVM + Embeddings (spaCy):** Using pre-trained Portuguese embeddings for semantic representation.
-- **BERT (Fine-tuned):** Adapting a pre-trained BERT model (Portuguese) for sentiment classification.
-- **In-Context Learning with LLMs:** Zero or few-shot classification using:
-  - **OpenAI GPT-4o**
-  - **Google Gemini**
+### Abordagens Híbridas
+- **SVM + Embeddings**
+  - Universal Sentence Encoder (USE)
+  - Sentence-BERT (SBERT)
 
----
+### LLMs Zero-shot
+- OpenAI GPT-4
+- Google Gemini 1.5
 
-## Data Description
+## 📚 Dataset
 
-The dataset consists of:
+- **Origem**: Olist Store (e-commerce brasileiro)
+- **Volume**: +100.000 avaliações em português (2016-2018)
+- **Classes**:
+  - Positivo: 4-5 estrelas (~40k reviews)
+  - Negativo: 1-2 estrelas (~20k reviews)
+  - *Neutro (3 estrelas) excluído*
+- **Split**: 80/10/10 (treino/validação/teste)
 
-- **review:** A free-form text evaluation of the smartphone.
-- **rating (1 to 5):** A numerical score reflecting consumer satisfaction.
+## 📱 Aplicação Web
 
-From the rating, we derive sentiment labels as follows:
+Uma interface web intuitiva foi desenvolvida usando o melhor modelo (BERTimbau):
 
-- Rating ≥ 4 → Positive
-- Rating ≤ 2 → Negative
-- Rating = 3 → Neutral
+- **Framework**: Gradio
+- **Características**:
+  - Interface intuitiva e responsiva
+  - Processamento em tempo real
+  - Indicador de confiança na classificação
+  - Exemplos pré-carregados
+- **Repositório**: [sentiment-analysis-app](https://github.com/lucianoayres/sentiment-analysis-app)
 
----
+## 🔍 Principais Conclusões
 
-## Sample Data
+1. **Alta Performance**: Todos os modelos transformer superaram 93% de acurácia
+2. **Melhor Modelo**: BERTimbau fine-tunado (94.26% acurácia)
+3. **Alternativa Eficiente**: SVM + SBERT oferece boa performance com menor custo computacional
+4. **Potencial LLMs**: Excelente performance em zero-shot, porém testado em amostra limitada
 
-Below are some example entries from the dataset (`reviews.csv`):
+## 🚀 Como Executar
 
-| review                                                                                   | rating |
-| ---------------------------------------------------------------------------------------- | ------ |
-| "O produto é ok, nada demais. não se destaca no mercado."                                | 3      |
-| "Decepcionante, não atendeu às expectativas."                                            | 1      |
-| "Não tenho muito o que comentar, cumpre o que promete."                                  | 2      |
-| "Gostei bastante, mas poderia ter mais funcionalidades."                                 | 4      |
-| "Excelente serviço, estou muito satisfeito porque atendeu todas as minhas expectativas." | 5      |
+### Projeto Principal
 
----
-
-## Running the Project
-
-This project is designed to run in **Google Colab**, not locally. Use the following placeholder link to open the notebook in Colab:
-
-**[Run in Google Colab](https://colab.research.google.com/drive/1WwAcQrNEa5Md1hhqvQt9R4uDtFJ57JS8?usp=sharing)**
-
-Before running:
-
-- Ensure that you have access to the necessary data files as described in the notebook.
-- All required libraries are installed within the notebook.
-- Generate and securely store your OpenAI and Google Gemini API keys as secrets in Google Colab.
-
----
-
-## Repository Structure
-
-The repository is organized as follows:
-
+1. Clone o repositório
 ```bash
-nlp-sentinel/
-├─ data/
-│  └─ reviews.csv
-├─ images/
-│  └─ sentinel_banner.png
-├─ notebook/
-│  └─ Pos_Deep_Learning_Projeto_NPL_Sentinel_22_Dez_2024.ipynb
-├─ python-src/
-│  └─ pos_deep_learning_projeto_npl_sentinel_22_dez_2024.py
-├─ .gitignore
-├─ LICENSE
-├─ Project NLP.pdf
-└─ README.md
+git clone https://github.com/lucianoayres/nlp-sentinel.git
+cd nlp-sentinel
 ```
 
-**Key Files:**
+2. Instale as dependências
+```bash
+pip install -r requirements.txt
+```
 
-- **[data/reviews.csv](data/reviews.csv)**: Contains the product reviews and corresponding ratings.
-- **[images/sentinel_banner.png](images/sentinel_banner.png)**: Banner image for the project.
-- **[notebook/Pos_Deep_Learning_Projeto_NPL_Sentinel_15_Dez_2024.ipynb](notebook/Pos_Deep_Learning_Projeto_NPL_Sentinel_22_Dez_2024.ipynb)**: Main Colab notebook with all code and analyses.
-- **[python-src/post_deep_learning_projeto_npl_sentinel_22_dez_2024.py](src/pos_deep_learning_projeto_npl_sentinel_22_dez_2024.py)**: Python script with project-related code.
+### Aplicação Web
+
+1. Clone o repositório da aplicação
+```bash
+git clone git@github.com:lucianoayres/sentiment-analysis-app.git
+cd sentiment-analysis-app
+```
+
+2. Execute o script de instalação
+```bash
+./run.sh
+```
+
+3. Execute a aplicação web
+```bash
+python app.py
+```
+
+## 📝 Citação
+
+```bibtex
+@article{carvalho2024nlpsentinel,
+  title={Análise Comparativa de Técnicas Avançadas de Deep Learning para Classificação de Sentimentos em Avaliações Multidomínio},
+  author={Carvalho, Luciano Ayres Farias de},
+  institution={Centro de Informática (CIn-UFPE)},
+  year={2024}
+}
+```
+
+## 👤 Autor
+
+**Luciano Ayres Farias de Carvalho**  
+Centro de Informática (CIn)  
+Universidade Federal de Pernambuco (UFPE)  
+Email: lafc@cin.ufpe.br
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
-
-## Results and Performance
-
-### Classical & Neural Models (SVM, BERT)
-
-| Model              | Accuracy | F1-Score |
-| ------------------ | -------- | -------- |
-| SVM + Bag of Words | 0.640476 | 0.630571 |
-| SVM + Embeddings   | 0.600000 | 0.583039 |
-| BERT               | 0.642857 | 0.639727 |
-
-**Key Observation:**
-Although not primarily focused on maximizing accuracy, BERT outperformed the SVM-based methods, achieving the highest accuracy and F1-Score among the tested models.
-
----
-
-### LLM In-Context Learning (OpenAI and Google Gemini)
-
-**OpenAI GPT-4o Evaluation (Sampled Set):**
-
-- Correct Classifications: 8/10 (80% accuracy for sampled set)
-
-**Google Gemini Evaluation (Sampled Set):**
-
-- Correct Classifications: 8/10 (80% accuracy for sampled set)
-
----
-
-## Contributions
-
-- **Authors:**
-  - Paloma Corrêa Alves (`pca2@cin.ufpe.br`)
-  - Luciano Ayres Farias de Carvalho (`lafc@cin.ufpe.br`)
-
-This project was developed as part of a **post-graduate** Deep Learning course at CIn - UFPE, under the supervision of Professor Luciano Barbosa.
-
-**NLP-Sentinel** serves as a foundation for exploring and applying NLP techniques to a product-related sentiment analysis scenario. While high accuracy was not the main goal, these experiments provide a valuable learning experience and can be extended to other domains, languages, and more complex sentiment tasks.
+Desenvolvido como parte do curso de Pós-graduação em Deep Learning no CIn-UFPE.
