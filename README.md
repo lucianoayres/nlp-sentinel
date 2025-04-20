@@ -135,8 +135,6 @@ Email: lafc@cin.ufpe.br
 
 ## 📄 Licença
 
-[MIT License](./LICENSE)
-
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
