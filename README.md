@@ -6,7 +6,7 @@ Uma solução completa para classificação de sentimentos em avaliações de e-
 
 ## Documentação e Recursos
 
-- 📝 [Relatório Completo](report/project-report.md)
+- 📝 Relatório Completo: [Markdown](report/project-report.md) | [PDF](report/project-report.pdf)
 - 📓 [Jupyter Notebook](notebook/Pos_Deep_Learning_Projeto_NLP_Sentinel_Projeto.ipynb)
 - 💻 [Código Fonte](src/pos_deep_learning_projeto_nlp_sentinel_projeto.py)
 
